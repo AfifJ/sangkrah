@@ -20,7 +20,7 @@ const Home = () => {
 				<Balance />
 				<QuickMenu />
 				<LastActivities />
-				<News />
+				{/* <News /> */}
 				<FAQ />
 				<div className="h-24"></div>
 			</div>

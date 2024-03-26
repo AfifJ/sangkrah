@@ -4,8 +4,11 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 const LogoutModal = ({ logoutButtonHandle }) => {
 	return (
 		<div className="bg-gray-800 flex bg-opacity-60 fixed bottom-0 top-0 left-0 right-0 z-50">
-			<div className="relative w-full flex h-full">
-				<div className="absolute bottom-0 w-full bg-white pb-8 pt-6 px-6 rounded-t-2xl">
+			<div
+				onClick={logoutButtonHandle}
+				className="relative w-full flex justify-center h-full"
+			>
+				<div className="absolute max-w-xl bottom-0 w-full bg-white pb-8 pt-6 px-6 rounded-t-2xl">
 					<button onClick={logoutButtonHandle}>
 						<XMarkIcon className="w-8 h-8" />
 					</button>
@@ -20,7 +23,10 @@ const LogoutModal = ({ logoutButtonHandle }) => {
 						<button className="bg-stone-700 hover:bg-stone-500 text-white w-full py-3 rounded-xl">
 							Yakin
 						</button>
-						<button className="text-stone-700 border-2 hover:bg-stone-300 border-stone-700 w-full py-3 rounded-xl">
+						<button
+							onClick={logoutButtonHandle}
+							className="text-stone-700 border-2 hover:bg-stone-300 border-stone-700 w-full py-3 rounded-xl"
+						>
 							Batal
 						</button>
 					</div>

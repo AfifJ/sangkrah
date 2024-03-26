@@ -1,45 +1,54 @@
 import { Link } from "react-router-dom";
+import {
+	BuangSampahIcon,
+	DaurUlangIcon,
+	IsiSaldoIcon,
+	TukarPoinIcon,
+} from "../assets/MenuIcon";
 
 const QuickMenu = () => {
 	const quickLink = [
 		{
 			title: "Daur Ulang",
-			image: "./icon-recycle.svg",
+			image: <DaurUlangIcon />,
 			href: "daur-ulang",
 		},
 		{
 			title: "Buang Sampah",
-			image: "./icon-trashcan.svg",
+			image: <BuangSampahIcon />,
 			href: "buang-sampah",
 		},
 		{
 			title: "Isi Saldo",
-			image: "./icon-topup.svg",
+			image: <IsiSaldoIcon />,
 			href: "isi-saldo",
 		},
 		{
 			title: "Tukar Poin",
-			image: "./icon-gift.svg",
+			image: <TukarPoinIcon />,
 			href: "tukar",
 		},
 	];
 
 	return (
-		<div className="mx-6 flex justify-between *:text-center *:font-semibold *:w-16 *:text-sm">
+		<div className="mx-6 flex justify-between *:text-center *:w-16 *:text-sm">
 			{quickLink.map((e) => (
 				<ButtonLayout e={e} />
 			))}
 		</div>
-		// QuickMenu
 	);
 };
 
 const ButtonLayout = ({ e }) => (
 	<Link className="block" to={e.href}>
 		<div className="bg-white w-16 h-16 rounded-2xl flex justify-center items-center ">
-			<img src={e.image} className="h-8 w-8" alt={e.title + " logo"} />
+			{typeof e.image === "string" ? (
+				<img src={e.image} className="h-8 w-8" alt={e.title + " logo"} />
+			) : (
+				e.image // Render the custom element directly
+			)}
 		</div>
-		<p className="mt-1 leading-4">{e.title}</p>
+		<p className="mt-2 leading-4">{e.title}</p>
 	</Link>
 );
 

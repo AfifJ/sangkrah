@@ -86,6 +86,8 @@ const Profile = () => {
 					</button>
 				</div>
 			</div>
+			<div className="h-24"></div>
+
 			{logoutConfirm && <LogoutModal logoutButtonHandle={logoutButtonHandle} />}
 		</>
 	);
