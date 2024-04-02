@@ -46,7 +46,7 @@ const BottomNav = () => {
 					<Link
 						to="transaksi"
 						type="button"
-						className={`inline-flex items-center justify-center px-5   group `}
+						className={`inline-flex flex-col items-center justify-center px-5  group`}
 					>
 						<div
 							className={`inline-flex flex-col w-16 items-center justify-center text-gray-500 hover:text-green-700 hover:bg-gray-100 p-2 rounded-xl ${
