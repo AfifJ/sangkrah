@@ -1,3 +1,5 @@
+import BackNavbar from "../components/BackNavbar";
+
 const Inbox = () => {
 	const messages = [
 		{
@@ -37,25 +39,7 @@ const Inbox = () => {
 
 	return (
 		<>
-			<div className="px-6 py-4">
-				<div className="flex justify-between items-center">
-					<h2 className="font-bold text-2xl">Pesan Masuk</h2>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth={1.5}
-						stroke="currentColor"
-						className="w-6 h-6"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-						/>
-					</svg>
-				</div>
-			</div>
+			<BackNavbar>Inbox</BackNavbar>
 			<div>
 				{sortedMessages.map((message) => (
 					<div
@@ -64,10 +48,16 @@ const Inbox = () => {
 					>
 						<div className="px-6">
 							<div className="flex items-center justify-between">
-								<h3 className={`text-lg ${!message.read && "font-bold line-clamp-1"}`}>
+								<h3
+									className={`text-lg ${
+										!message.read && "font-bold line-clamp-1"
+									}`}
+								>
 									{message.title}
 								</h3>
-								<span className="text-gray-500 line-clamp-1">{message.date}</span>
+								<span className="text-gray-500 line-clamp-1">
+									{message.date}
+								</span>
 							</div>
 							<div className="flex items-center justify-between">
 								<p className="text-muted line-clamp-1">{message.content}</p>

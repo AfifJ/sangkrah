@@ -16,7 +16,6 @@ export default {
 				},
 				/* to make bg subtle, use bg opacity 0.1 */
 				base: {
-					DEFAULT: "#ffffff",
 					200: "#f9fafb",
 					300: "#ced3d9",
 					content: "#1e2734",

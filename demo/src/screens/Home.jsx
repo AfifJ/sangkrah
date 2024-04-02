@@ -1,5 +1,8 @@
+import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import RecycleIcon from "../assets/RecycleIcon";
 import TrashIcon from "../assets/TrashIcon";
+import { Link } from "react-router-dom";
+import { CircleStackIcon, WalletIcon } from "@heroicons/react/24/solid";
 
 const Home = () => {
 	return (
@@ -9,24 +12,14 @@ const Home = () => {
 					<p className="text-sm">Selamat Pagi</p>
 					<p className="font-bold text-xl">John Doe</p>
 				</div>
-				<div className="flex bg-primary bg-opacity-10 w-10 h-10 justify-center items-center rounded-full">
+				<Link
+					to="/inbox"
+					className="flex bg-primary hover:bg-primary-focus hover:bg-opacity-30 bg-opacity-10 w-10 h-10 justify-center items-center rounded-full"
+				>
 					<div className="text-primary">
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth={1.5}
-							stroke="currentColor"
-							className="w-6 h-6"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
-							/>
-						</svg>
+						<EnvelopeIcon className="h-6 w-6" />
 					</div>
-				</div>
+				</Link>
 			</div>
 			<div className="flex mx-4 mt-4">
 				<div className="text-primary mr-2">
@@ -105,45 +98,28 @@ const Home = () => {
 			<h2 className="mt-4 mx-4 text-xl font-semibold">Menu Utama</h2>
 
 			<div className="mt-4 mx-4 flex *:w-full bg-gradient-to-r from-primary to-[#479364] rounded-3xl overflow-clip text-white py-5 px-6">
-				<div className="flex">
+				<Link to="/topup" className="flex">
 					<div className="bg-white rounded-3xl bg-opacity-20 h-fit w-fit mr-2">
 						<div className="p-2">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="currentColor"
-								className="w-6 h-6"
-							>
-								<path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
-							</svg>
+							<WalletIcon className="w-6 h-6" />
 						</div>
 					</div>
 					<div>
 						<p className="text-xl font-semibold">Rp128,887</p>
 						<p className="text-sm text-base-200 opacity-70">Topup Saldo</p>
 					</div>
-				</div>
-				<div className="flex">
+				</Link>
+				<Link to="/redeem" className="flex">
 					<div className="bg-white rounded-3xl bg-opacity-20 h-fit w-fit mr-2">
 						<div className="p-2">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								viewBox="0 0 24 24"
-								fill="currentColor"
-								className="w-6 h-6"
-							>
-								<path d="M21 6.375c0 2.692-4.03 4.875-9 4.875S3 9.067 3 6.375 7.03 1.5 12 1.5s9 2.183 9 4.875Z" />
-								<path d="M12 12.75c2.685 0 5.19-.586 7.078-1.609a8.283 8.283 0 0 0 1.897-1.384c.016.121.025.244.025.368C21 12.817 16.97 15 12 15s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.285 8.285 0 0 0 1.897 1.384C6.809 12.164 9.315 12.75 12 12.75Z" />
-								<path d="M12 16.5c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 0 0 1.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 0 0 1.897 1.384C6.809 15.914 9.315 16.5 12 16.5Z" />
-								<path d="M12 20.25c2.685 0 5.19-.586 7.078-1.609a8.282 8.282 0 0 0 1.897-1.384c.016.121.025.244.025.368 0 2.692-4.03 4.875-9 4.875s-9-2.183-9-4.875c0-.124.009-.247.025-.368a8.284 8.284 0 0 0 1.897 1.384C6.809 19.664 9.315 20.25 12 20.25Z" />
-							</svg>
+							<CircleStackIcon className="w-6 h-6" />
 						</div>
 					</div>
 					<div>
 						<p className="text-xl font-semibold">55 Poin</p>
 						<p className="text-sm text-base-200 opacity-70">Tukar Poin</p>
 					</div>
-				</div>
+				</Link>
 			</div>
 
 			<div className="mt-4 mx-4 gap-4 flex">
@@ -289,7 +265,7 @@ const Home = () => {
 			</div>
 
 			<h2 className="text-xl font-semibold mt-4 mx-4">Berita</h2>
-			<div className="mt-4 mx-4  flex space-x-6 overflow-y-scroll">
+			<div className="mt-4 mx-4 pb-4 flex space-x-6 overflow-x-scroll">
 				<div className="max-w-64">
 					<div className="bg-gray-400 h-40 w-64 rounded-3xl">
 						{/* img thumbnail */}

@@ -12,6 +12,8 @@ import Inbox from "./screens/Inbox";
 import Pickup from "./screens/Pickup";
 import ProfileEdit from "./screens/ProfileEdit";
 import ProfileNewPassword from "./screens/ProfileNewPassword";
+import Redeem from "./screens/Redeem";
+import Topup from "./screens/Topup";
 const App = () => {
 	const router = createBrowserRouter([
 		{
@@ -30,6 +32,14 @@ const App = () => {
 					path: "pickup",
 					element: <Pickup />,
 				},
+				{
+					path: "redeem",
+					element: <Redeem />,
+				},
+        {
+          path: "topup", 
+          element: <Topup />
+        },
 				{
 					path: "inbox",
 					element: <Inbox />,
@@ -60,14 +70,14 @@ const App = () => {
 
 const LayoutNav = () => {
 	const location = useLocation();
-	const isProfileChildRoute = location.pathname.startsWith("/profile/");
+	const isNotShowing = location.pathname.startsWith("/profile/") || location.pathname.startsWith("/topup");
 	return (
 		<>
 			<div className="max-w-xl mx-auto">
 				<Outlet />
 			</div>
 
-			{!isProfileChildRoute && <BottomNav />}
+			{!isNotShowing && <BottomNav />}
 		</>
 	);
 };

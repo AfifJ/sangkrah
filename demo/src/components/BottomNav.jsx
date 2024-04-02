@@ -3,12 +3,13 @@ import {
 	DocumentTextIcon as DocOutline,
 	EnvelopeIcon as EnvelopeOutline,
 	HomeIcon as HomeOutline,
+  GiftIcon as GiftOutline,
 	UserCircleIcon as UserOutline,
 } from "@heroicons/react/24/outline";
 import {
 	UserCircleIcon as UserSolid,
 	DocumentTextIcon as DocSolid,
-	EnvelopeIcon as EnvelopeSolid,
+  GiftIcon as GiftSolid,
 	HomeIcon as HomeSolid,
 	TrashIcon,
 } from "@heroicons/react/24/solid";
@@ -18,7 +19,7 @@ const BottomNav = () => {
 	const isHomeActive = location.pathname === "/";
 	const isTransaksiActive = location.pathname === "/transaksi";
 	const isPickupActive = location.pathname === "/pickup";
-	const isInboxActive = location.pathname === "/inbox";
+	const isRedeemActive = location.pathname === "/redeem";
 	const isProfileActive = location.pathname === "/profile";
 
 	return (
@@ -78,21 +79,21 @@ const BottomNav = () => {
 					</Link>
 
 					<Link
-						to="inbox"
+						to="redeem"
 						type="button"
 						className={`inline-flex items-center justify-center px-5   group `}
 					>
 						<div
 							className={`inline-flex flex-col w-16 items-center justify-center text-gray-500 hover:text-green-700 hover:bg-gray-100 p-2 rounded-xl ${
-								isInboxActive ? "text-green-700" : "text-gray-500"
+								isRedeemActive ? "text-green-700" : "text-gray-500"
 							}`}
 						>
-							{isInboxActive ? (
-								<EnvelopeSolid className="h-6 w-6" />
+							{isRedeemActive ? (
+								<GiftSolid className="h-6 w-6" />
 							) : (
-								<EnvelopeOutline className="h-6 w-6" />
+								<GiftOutline className="h-6 w-6" />
 							)}
-							Inbox
+							Tukar
 						</div>
 					</Link>
 					<Link
