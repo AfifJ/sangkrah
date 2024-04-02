@@ -13,9 +13,9 @@ const FAQ = () => {
 	];
 
 	return (
-		<div className="mx-9">
+		<div className="mx-6">
 			<div className="mb-2">
-				<h2 className="font-bold text-lg">FAQ</h2>
+				<h2 className="font-semibold text-lg">FAQ</h2>
 			</div>
 			<div className="*:mb-4">
 				{faq.map((e) => (

@@ -13,7 +13,7 @@ const FAQ = () => {
 	];
 
 	return (
-		<div className="mx-9">
+		<div className="mx-6">
 			<div className="mb-2">
 				<h2 className="font-bold text-lg">FAQ</h2>
 			</div>

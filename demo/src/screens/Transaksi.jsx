@@ -101,7 +101,7 @@ const Transaksi = () => {
 
 	return (
 		<>
-			<div className="bg-[#3A844F] px-9 pt-8 pb-24 text-white flex justify-between items-center">
+			<div className="bg-[#3A844F] px-6 pt-8 pb-24 text-white flex justify-between items-center">
 				<div>
 					<div className="font-light">Saldo Kamu</div>
 					<div className="text-3xl font-semibold">Rp128,887</div>
@@ -110,7 +110,7 @@ const Transaksi = () => {
 					<img className="w-14 h-14 rounded-full" src="avatar.png" alt="" />
 				</div>
 			</div>
-			<div className="px-9 pt-4 bg-gray-100 -mt-8 rounded-t-3xl">
+			<div className="px-6 pt-4 bg-gray-100 -mt-8 rounded-t-3xl">
 				<div className="flex justify-between items-center mb-4">
 					<h2 className="font-bold text-2xl">Transaksi Saya</h2>
 					<svg
@@ -123,7 +123,7 @@ const Transaksi = () => {
 					>
 						<path
 							strokeLinecap="round"
-							strokeLineJoin="round"
+							strokeLinejoin="round"
 							d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
 						/>
 					</svg>
@@ -166,7 +166,7 @@ const TransaksiHarian = ({ transaksi }) => {
 					>
 						<path
 							strokeLinecap="round"
-							strokeLineJoin="round"
+							strokeLinejoin="round"
 							d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
 						/>
 					</svg>
@@ -181,7 +181,7 @@ const TransaksiHarian = ({ transaksi }) => {
 					>
 						<path
 							strokeLinecap="round"
-							strokeLineJoin="round"
+							strokeLinejoin="round"
 							d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
 						/>
 					</svg>

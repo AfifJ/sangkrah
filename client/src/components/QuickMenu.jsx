@@ -25,7 +25,7 @@ const QuickMenu = () => {
 	];
 
 	return (
-		<div className="mx-9 flex justify-between *:text-center *:font-semibold *:w-16 *:text-sm">
+		<div className="mx-6 flex justify-between *:text-center *:font-semibold *:w-16 *:text-sm">
 			{quickLink.map((e) => (
 				<ButtonLayout e={e} />
 			))}
