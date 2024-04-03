@@ -14,6 +14,7 @@ import ProfileEdit from "./screens/ProfileEdit";
 import ProfileNewPassword from "./screens/ProfileNewPassword";
 import Redeem from "./screens/Redeem";
 import Topup from "./screens/Topup";
+import TopupDetail from "./screens/TopupDetail";
 const App = () => {
 	const router = createBrowserRouter([
 		{
@@ -36,10 +37,13 @@ const App = () => {
 					path: "redeem",
 					element: <Redeem />,
 				},
-        {
-          path: "topup", 
-          element: <Topup />
-        },
+				{
+					path: "topup",
+					children: [
+						{ index: true, element: <Topup /> },
+						{ path: "confirmation", element: <TopupDetail /> },
+					],
+				},
 				{
 					path: "inbox",
 					element: <Inbox />,
@@ -55,10 +59,10 @@ const App = () => {
 							path: "edit",
 							element: <ProfileEdit />,
 						},
-            {
-              path: "update-password",
-              element: <ProfileNewPassword />
-            }
+						{
+							path: "update-password",
+							element: <ProfileNewPassword />,
+						},
 					],
 				},
 			],
@@ -70,7 +74,9 @@ const App = () => {
 
 const LayoutNav = () => {
 	const location = useLocation();
-	const isNotShowing = location.pathname.startsWith("/profile/") || location.pathname.startsWith("/topup");
+	const isNotShowing =
+		location.pathname.startsWith("/profile/") ||
+		location.pathname.startsWith("/topup");
 	return (
 		<>
 			<div className="max-w-xl mx-auto">
