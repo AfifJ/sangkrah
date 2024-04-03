@@ -100,7 +100,7 @@ const Home = () => {
       <div className="mx-4 mt-4 flex space-x-4 overflow-clip rounded-3xl bg-gradient-to-r from-primary to-[#479364] text-white *:w-full">
         <Link
           to="/topup"
-          className="flex rounded-2xl py-6 px-5 hover:bg-black hover:bg-opacity-20"
+          className="flex rounded-2xl px-5 py-6 hover:bg-black hover:bg-opacity-20"
         >
           <div className="mr-2 h-fit w-fit rounded-3xl bg-white bg-opacity-20">
             <div className="p-2">
@@ -114,7 +114,7 @@ const Home = () => {
         </Link>
         <Link
           to="/redeem"
-          className="flex rounded-2xl py-6 px-5 hover:bg-black hover:bg-opacity-20"
+          className="flex rounded-2xl px-5 py-6 hover:bg-black hover:bg-opacity-20"
         >
           <div className="mr-2 h-fit w-fit rounded-3xl bg-white bg-opacity-20">
             <div className="p-2">
@@ -129,7 +129,10 @@ const Home = () => {
       </div>
 
       <div className="mx-4 mt-4 flex gap-4">
-        <div className="relative w-full overflow-clip rounded-3xl border border-black border-opacity-10 ">
+        <Link
+          to={"/recycle"}
+          className="relative w-full overflow-clip rounded-3xl border border-black border-opacity-10 "
+        >
           <div className="absolute">
             <svg
               width="179"
@@ -172,9 +175,12 @@ const Home = () => {
             </div>
             <div>Daur Ulang</div>
           </div>
-        </div>
+        </Link>
 
-        <div className="relative w-full overflow-clip rounded-3xl border border-black border-opacity-10">
+        <Link
+          to={"/buang"}
+          className="relative w-full overflow-clip rounded-3xl border border-black border-opacity-10"
+        >
           <div className="absolute">
             <svg
               width="179"
@@ -217,7 +223,7 @@ const Home = () => {
             </div>
             <div>Buang Sampah</div>
           </div>
-        </div>
+        </Link>
       </div>
 
       <h2 className="mx-4 mt-4 text-xl font-semibold">
