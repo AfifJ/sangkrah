@@ -58,7 +58,7 @@ const Topup = () => {
 				</div>
 			</div>
 
-			<div className="absolute flex bottom-0 left-0 right-0 px-5 py-4">
+			<div className="absolute max-w-xl mx-auto flex bottom-0 left-0 right-0 px-5 py-4">
 				<Link
 					type="button"
 					to={`${selectedOption === null ? "#" : "confirmation"}`} // reversed the condition
