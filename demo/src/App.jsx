@@ -17,6 +17,8 @@ import Topup from "./screens/Topup"
 import TopupDetail from "./screens/TopupDetail"
 import Recycle from "./screens/Recycle"
 import Buang from "./screens/Buang"
+import Login from "./screens/Login"
+import Register from "./screens/Register"
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -57,6 +59,14 @@ const App = () => {
         {
           path: "buang",
           element: <Buang />,
+        },
+        {
+          path: "login",
+          element: <Login />,
+        },
+        {
+          path: "register",
+          element: <Register />,
         },
         {
           path: "profile",
