@@ -19,6 +19,9 @@ import Recycle from "./screens/Recycle"
 import Buang from "./screens/Buang"
 import Login from "./screens/Login"
 import Register from "./screens/Register"
+import { MapProvider } from "react-map-gl"
+import { useEffect, useState } from "react"
+
 const App = () => {
   const router = createBrowserRouter([
     {
@@ -88,7 +91,6 @@ const App = () => {
       ],
     },
   ])
-
   return <RouterProvider router={router} />
 }
 
@@ -100,6 +102,7 @@ const LayoutNav = () => {
     location.pathname === "/pickup" ||
     location.pathname === "/redeem" ||
     location.pathname === "/profile"
+
   return (
     <>
       <div className="mx-auto max-w-xl">

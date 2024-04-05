@@ -1,142 +1,127 @@
+import React, { useState } from "react"
+import Success from "../components/Success"
 import BackNavbar from "../components/BackNavbar"
+import RecyclingCenterSelectionPage from "../components/RecyclingCenterSelectionPage"
+import DeliveryMethodSelectionPage from "../components/DeliveryMethodSelectionPage"
+import PickupDetailsPage from "../components/PickupDetailsPage"
+import WasteTypeSelectionPage from "../components/WasteTypeSelectionPage"
+import TransactionDetailsPage from "../components/TransactionDetailsPage"
+import ConfirmationModal from "../components/ConfirmationModal"
 
-const Recycle = () => {
+const RecyclingPage = () => {
+  const [selectedRecyclingCenter, setSelectedRecyclingCenter] = useState(null)
+  const [deliveryMethod, setDeliveryMethod] = useState("")
+  const [pickupAddress, setPickupAddress] = useState("")
+  const [pickupSchedule, setPickupSchedule] = useState("")
+  const [selectedWasteType, setSelectedWasteType] = useState("")
+  const [wasteWeight, setWasteWeight] = useState(0)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [transactionConfirmed, setTransactionConfirmed] = useState(false)
+
+  const recyclingCenters = [
+    { id: 1, name: "Tempat Daur Ulang A", distance: "1 km" },
+    { id: 2, name: "Tempat Daur Ulang B", distance: "2 km" },
+    { id: 3, name: "Tempat Daur Ulang C", distance: "3 km" },
+  ]
+
+  const wasteTypes = [
+    { id: 1, name: "Plastik", icon: "🚮" },
+    { id: 2, name: "Kertas", icon: "📄" },
+    { id: 3, name: "Logam", icon: "🔩" },
+  ]
+
+  const preConfirm =
+    deliveryMethod === "jemput"
+      ? pickupAddress && pickupSchedule && wasteWeight && wasteTypes
+      : wasteWeight && wasteTypes
+
+  const handleRecyclingCenterSelect = (recyclingCenter) => {
+    setSelectedRecyclingCenter(recyclingCenter)
+  }
+
+  const handleDeliveryMethodSelect = (method) => {
+    setDeliveryMethod(method)
+  }
+
+  const handlePickupScheduleSelect = (schedule) => {
+    setPickupSchedule(schedule)
+  }
+
+  const handleWasteTypeSelect = (wasteType) => {
+    setSelectedWasteType(wasteType)
+  }
+
+  const handleWeightChange = (weight) => {
+    setWasteWeight(weight)
+  }
+
+  const handleConfirmation = () => {
+    setShowConfirmation(true)
+  }
+
+  const handleConfirmTransaction = () => {
+    setTransactionConfirmed(true)
+    setShowConfirmation(false)
+  }
+
+  const handleCancelTransaction = () => {
+    setShowConfirmation(false)
+  }
+
   return (
     <>
-      <BackNavbar>Daur Ulang Sampah</BackNavbar>
-
-      <form action="/submit_recycling_form" className="space-y-4 px-5">
-        <div>
-          <label
-            for="waste_type"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Jenis Sampah:
-          </label>
-          <select
-            id="waste_type"
-            name="waste_type"
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-          >
-            <option value="plastic">Plastik</option>
-            <option value="paper">Kertas</option>
-            <option value="glass">Kaca</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            for="total_weight"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Berat Total (kg):
-          </label>
-          <input
-            type="number"
-            id="total_weight"
-            name="total_weight"
-            min="1"
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+      <BackNavbar>Recycle</BackNavbar>
+      <div className="container mx-auto p-4">
+        {!selectedRecyclingCenter && (
+          <RecyclingCenterSelectionPage
+            title="Pilih Tempat Daur Ulang"
+            items={recyclingCenters}
+            onSelect={handleRecyclingCenterSelect}
           />
-        </div>
-
-        <div>
-          <label
-            for="recycling_place"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Pilih Tempat Daur Ulang:
-          </label>
-          <select
-            id="recycling_place"
-            name="recycling_place"
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-          >
-            <option value="place1">Tempat 1</option>
-            <option value="place2">Tempat 2</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            for="pickup_method"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Pilih Metode Pengambilan:
-          </label>
-          <div className="mt-2">
-            <div className="flex">
-              <input
-                type="radio"
-                id="self_delivery"
-                name="pickup_method"
-                value="self_delivery"
-                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+        )}
+        {selectedRecyclingCenter && !deliveryMethod && (
+          <DeliveryMethodSelectionPage
+            title="Pilih Metode Pengiriman"
+            onSelect={handleDeliveryMethodSelect}
+          />
+        )}
+        {deliveryMethod && (
+          <>
+            <div className="space-y-6">
+              {deliveryMethod === "jemput" && (
+                <PickupDetailsPage
+                  onAddressChange={setPickupAddress}
+                  onScheduleSelect={setPickupSchedule}
+                />
+              )}
+              <WasteTypeSelectionPage
+                title="Pilih Jenis Sampah"
+                wasteTypes={wasteTypes}
+                onSelect={handleWasteTypeSelect}
+                onWeightChange={handleWeightChange}
               />
-              <label
-                for="self_delivery"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Antar Sendiri
-              </label>
-            </div>
-            <div className="flex">
-              <input
-                type="radio"
-                id="pickup"
-                name="pickup_method"
-                value="pickup"
-                className="h-4 w-4 border-gray-300 text-primary focus:ring-primary"
+              <TransactionDetailsPage
+                title="Detail Transaksi"
+                recyclingCenter={selectedRecyclingCenter}
+                deliveryMethod={deliveryMethod}
+                wasteType={selectedWasteType}
+                wasteWeight={wasteWeight}
+                preConfirm={preConfirm}
+                onConfirm={handleConfirmation}
               />
-              <label for="pickup" className="ml-2 block text-sm text-gray-900">
-                Dijemput
-              </label>
             </div>
-          </div>
-        </div>
-
-        <div>
-          <label
-            for="pickup_date"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Jadwal Penjemputan:
-          </label>
-          <input
-            type="date"
-            id="pickup_date"
-            name="pickup_date"
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
+          </>
+        )}
+        {showConfirmation && (
+          <ConfirmationModal
+            onConfirm={handleConfirmTransaction}
+            onCancel={handleCancelTransaction}
           />
-        </div>
-
-        <div>
-          <label
-            for="payment_method"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Pilih Metode Pembayaran:
-          </label>
-          <select
-            id="payment_method"
-            name="payment_method"
-            className="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-primary sm:text-sm"
-          >
-            <option value="cash">Tunai</option>
-            <option value="bank_transfer">Transfer Bank</option>
-          </select>
-        </div>
-
-        <div>
-          <input
-            type="submit"
-            value="Submit"
-            className="flex w-full justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary-focus focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-          />
-        </div>
-      </form>
+        )}
+        {transactionConfirmed && <Success closeBtn={false} />}
+      </div>
     </>
   )
 }
 
-export default Recycle
+export default RecyclingPage

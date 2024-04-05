@@ -1,5 +1,4 @@
 import BackNavbar from "../components/BackNavbar";
-import InputBox from "../components/InputBox";
 
 const ProfileEdit = () => {
 	return (

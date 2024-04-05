@@ -163,7 +163,7 @@ const Home = () => {
                 cy="-38.0386"
                 r="89.5"
                 fill="#0B9442"
-                fill-opacity="0.3"
+                fillOpacity="0.3"
               />
             </svg>
           </div>
@@ -211,7 +211,7 @@ const Home = () => {
                 cy="-38.0386"
                 r="89.5"
                 fill="#944D0B"
-                fill-opacity="0.3"
+                fillOpacity="0.3"
               />
             </svg>
           </div>
