@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import { CircleStackIcon } from "@heroicons/react/24/solid"
+import { Link } from "react-router-dom"
 
 const Redeem = () => {
   const [filter, setFilter] = useState("semua")
@@ -114,7 +115,8 @@ const Redeem = () => {
         <div className="grid grid-cols-1 gap-4 px-5 pt-6 md:grid-cols-2">
           {items.length > 0 ? (
             items.map((item) => (
-              <div
+              <Link
+                to={"detail"}
                 key={item.title}
                 className="rounded-2xl border border-base-content border-opacity-40 bg-white"
               >
@@ -128,10 +130,10 @@ const Redeem = () => {
                     Tukar
                   </button>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
-            <div className="text-lg font-semibold text-center">
+            <div className="text-center text-lg font-semibold">
               Maaf, item yang Anda cari tidak tersedia.
             </div>
           )}

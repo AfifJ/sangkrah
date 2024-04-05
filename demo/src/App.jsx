@@ -20,6 +20,8 @@ import Recycle from "./screens/Recycle"
 import Buang from "./screens/Buang"
 import Login from "./screens/Login"
 import Register from "./screens/Register"
+import DetailHistory from "./components/DetailHistory"
+import VoucherDetail from "./components/DetailVoucher"
 
 const App = () => {
   const router = createBrowserRouter([
@@ -33,7 +35,10 @@ const App = () => {
         },
         {
           path: "transaksi",
-          element: <Transaksi />,
+          children: [
+            { index: true, element: <Transaksi /> },
+            { path: "detail", element: <DetailHistory /> },
+          ],
         },
         {
           path: "pickup",
@@ -41,7 +46,10 @@ const App = () => {
         },
         {
           path: "redeem",
-          element: <Redeem />,
+          children: [
+            { index: true, element: <Redeem /> },
+            { path: "detail", element: <VoucherDetail /> },
+          ],
         },
         {
           path: "topup",
@@ -101,9 +109,9 @@ const LayoutNav = () => {
   const location = useLocation()
   const isShowing =
     location.pathname === "/" ||
-    location.pathname === "/transaksi" ||
+    location.pathname.startsWith("/transaksi") ||
     location.pathname === "/pickup" ||
-    location.pathname === "/redeem" ||
+    location.pathname.startsWith("/redeem") ||
     location.pathname === "/profile"
 
   return (

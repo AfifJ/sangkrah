@@ -17,9 +17,9 @@ import {
 const BottomNav = () => {
 	const location = useLocation();
 	const isHomeActive = location.pathname === "/";
-	const isTransaksiActive = location.pathname === "/transaksi";
+	const isTransaksiActive = location.pathname.startsWith("/transaksi");
 	const isPickupActive = location.pathname === "/pickup";
-	const isRedeemActive = location.pathname === "/redeem";
+	const isRedeemActive = location.pathname.startsWith("/redeem");
 	const isProfileActive = location.pathname === "/profile";
 
 	return (
