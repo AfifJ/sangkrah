@@ -1,26 +1,21 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
-// Membuat context
-const MapContext = createContext();
+export const MapContext = createContext();
 
-// Membuat provider
 export const MapProvider = ({ children }) => {
-  const [contextMap, setContextMap] = useState(null);
+  const [viewport, setViewport] = useState({
+    longitude: 118.015776,
+    latitude: -2.600029,
+    zoom: 5,
+  });
+
+  const updateViewport = (newViewport) => {
+    setViewport(newViewport);
+  };
 
   return (
-    <MapContext.Provider value={{ contextMap, setContextMap }}>
+    <MapContext.Provider value={{ viewport, updateViewport }}>
       {children}
     </MapContext.Provider>
   );
-};
-
-// Membuat custom hook untuk menggunakan context
-export const useContextMap = () => {
-  const context = useContext(MapContext);
-
-  if (!context) {
-    throw new Error('useMap must be used within a MapProvider');
-  }
-
-  return context;
 };

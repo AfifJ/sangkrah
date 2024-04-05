@@ -1,3 +1,4 @@
+import { MapProvider } from "react-map-gl"
 import BottomNav from "./components/BottomNav"
 import Home from "./screens/Home"
 import {
@@ -19,8 +20,6 @@ import Recycle from "./screens/Recycle"
 import Buang from "./screens/Buang"
 import Login from "./screens/Login"
 import Register from "./screens/Register"
-import { MapProvider } from "react-map-gl"
-import { useEffect, useState } from "react"
 
 const App = () => {
   const router = createBrowserRouter([
@@ -91,7 +90,11 @@ const App = () => {
       ],
     },
   ])
-  return <RouterProvider router={router} />
+  return (
+    <MapProvider>
+      <RouterProvider router={router} />
+    </MapProvider>
+  )
 }
 
 const LayoutNav = () => {
