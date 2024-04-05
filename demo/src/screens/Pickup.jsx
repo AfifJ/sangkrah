@@ -28,7 +28,7 @@ const Pickup = () => {
   return (
     <div className="h-screen w-full">
       <Map
-        mapboxAccessToken={import.meta.env.VITE_MAPBOX_KEY}
+        mapboxAccessToken={import.meta.env.VITE_MAPBOX_KEY ?? process.env.VITE_MAPBOX_KEY}
         initialViewState={viewport}
         style={{ width: "100%", height: "100%" }}
         mapStyle="mapbox://styles/mapbox/streets-v9"
