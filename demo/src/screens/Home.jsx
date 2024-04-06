@@ -230,9 +230,9 @@ const Home = () => {
         Panduan Sorting Sampah
       </h2>
       <div className="bolder-black mx-4 mt-4 space-y-4 rounded-3xl border border-opacity-30 px-6 py-6">
-        <div className="flex items-center">
-          <div className="mr-2 h-8 w-8 overflow-clip rounded-full bg-blue-300">
-            <div>svg logo</div>
+        <Link to={"/guide"} className="flex items-center">
+          <div className="mr-2 overflow-clip rounded-full flex justify-center items-center bg-blue-300">
+            <div className="h-8 w-8 text-center text-2xl">🍼</div>
           </div>
           <span className="w-full">Plastik</span>
           <div>
@@ -251,7 +251,7 @@ const Home = () => {
               />
             </svg>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center">
           <div className="mr-2 h-8 w-8 overflow-clip rounded-full bg-blue-300">
             <div>svg logo</div>

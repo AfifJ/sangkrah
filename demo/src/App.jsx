@@ -22,6 +22,7 @@ import Login from "./screens/Login"
 import Register from "./screens/Register"
 import DetailHistory from "./components/DetailHistory"
 import VoucherDetail from "./components/DetailVoucher"
+import SortingGuide from "./screens/SortingGuide"
 
 const App = () => {
   const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const App = () => {
         {
           path: "pickup",
           element: <Pickup />,
+        },
+        {
+          path: "guide",
+          element: <SortingGuide />,
         },
         {
           path: "redeem",
@@ -98,6 +103,8 @@ const App = () => {
       ],
     },
   ])
+
+  
   return (
     <MapProvider>
       <RouterProvider router={router} />
@@ -110,6 +117,7 @@ const LayoutNav = () => {
   const isShowing =
     location.pathname === "/" ||
     location.pathname.startsWith("/transaksi") ||
+    location.pathname.startsWith("/guide") ||
     location.pathname === "/pickup" ||
     location.pathname.startsWith("/redeem") ||
     location.pathname === "/profile"

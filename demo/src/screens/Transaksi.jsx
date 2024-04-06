@@ -108,7 +108,7 @@ const Transaksi = () => {
               // to={`/transaksi/${transaction.id}`}
               to={`/transaksi/detail`}
               key={transaction.id}
-              className="rounded-2xl border border-gray-300 p-4 shadow-md"
+              className="rounded-2xl border bg-white border-gray-300 p-4"
             >
               <div className="flex items-center">
                 <span className="mr-2 text-2xl">

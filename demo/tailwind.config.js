@@ -33,6 +33,6 @@ export default {
       },
     },
   },
-  plugins: ["prettier-plugin-tailwindcss"],
+  plugins: [require("@tailwindcss/typography"), "prettier-plugin-tailwindcss"],
   darkMode: "false",
 }
