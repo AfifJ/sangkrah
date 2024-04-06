@@ -7,11 +7,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
-      output: {
-        manualChunks: {
-          marked: ["marked"], // create a separate chunk for marked
-        },
-      },
+      external: ["marked"], // exclude marked from the bundle
     },
   },
 })
