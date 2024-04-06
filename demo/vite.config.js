@@ -6,8 +6,6 @@ export default defineConfig({
   assetsInclude: ["**/*.md"], // include Markdown files in the build
   plugins: [react()],
   build: {
-    rollupOptions: {
-      external: ["marked"], // exclude marked from the bundle
-    },
+    chunkSizeWarningLimit: 1600, // increase the warning limit
   },
 })
