@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react"
 import BackNavbar from "../components/BackNavbar"
-import { useParams } from "react-router-dom"
 import Markdown from "react-markdown"
 
-const SortingGuide = () => {
+const AboutSangkrah = () => {
   const [post, setPost] = useState("")
-  const { id } = useParams()
 
   useEffect(() => {
-    import(`../content/sorting-guide/${id}.md`)
+    import(`../content/about.md`)
       .then((res) => {
         fetch(res.default)
           .then((res) => res.text())
@@ -20,7 +18,7 @@ const SortingGuide = () => {
 
   return (
     <div>
-      <BackNavbar>Sorting Guide</BackNavbar>
+      <BackNavbar link="/profile">Tentang sangkrah</BackNavbar>
       <div className="prose prose-img:w-full">
         <Markdown>{post}</Markdown>
       </div>
@@ -29,4 +27,4 @@ const SortingGuide = () => {
   )
 }
 
-export default SortingGuide
+export default AboutSangkrah

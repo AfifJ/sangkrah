@@ -108,13 +108,14 @@ const Transaksi = () => {
               // to={`/transaksi/${transaction.id}`}
               to={`/transaksi/detail`}
               key={transaction.id}
-              className="rounded-2xl border bg-white border-gray-300 p-4"
+              className="rounded-2xl border border-gray-300 bg-white p-4"
             >
               <div className="flex items-center">
                 <span className="mr-2 text-2xl">
                   {categoryIcons[transaction.category]}
                 </span>
                 <h2 className="text-lg font-semibold">{transaction.title}</h2>
+                <p className="text-gray-600 ml-auto">{transaction.date}</p>
               </div>
               <p className="mb-2 text-gray-600">{transaction.description}</p>
               <p

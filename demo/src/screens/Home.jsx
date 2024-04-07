@@ -3,6 +3,9 @@ import RecycleIcon from "../assets/RecycleIcon"
 import TrashIcon from "../assets/TrashIcon"
 import { Link } from "react-router-dom"
 import { CircleStackIcon, WalletIcon } from "@heroicons/react/24/solid"
+import SortingGuide from "./SortingGuide"
+import { useEffect, useState } from "react"
+import Guide from "../components/Guide"
 
 const Home = () => {
   return (
@@ -230,50 +233,11 @@ const Home = () => {
         Panduan Sorting Sampah
       </h2>
       <div className="bolder-black mx-4 mt-4 space-y-4 rounded-3xl border border-opacity-30 px-6 py-6">
-        <Link to={"/guide"} className="flex items-center">
-          <div className="mr-2 overflow-clip rounded-full flex justify-center items-center bg-blue-300">
-            <div className="h-8 w-8 text-center text-2xl">🍼</div>
-          </div>
-          <span className="w-full">Plastik</span>
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
-        </Link>
-        <div className="flex items-center">
-          <div className="mr-2 h-8 w-8 overflow-clip rounded-full bg-blue-300">
-            <div>svg logo</div>
-          </div>
-          <span className="w-full">Plastik</span>
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
-        </div>
+        <Guide file="plastik" title="Plasti" icon="🍼" />
+        <Guide file="kertas" title="kertas" icon="📰" />
+        <Guide file="logam" title="Logam" icon="🧲" />
+        <Guide file="kaca" title="Kaca" icon="🥛" />
+        <Guide file="elektronik" title="Elektronik" icon="📻" />
       </div>
 
       <h2 className="mx-4 mt-4 text-xl font-semibold">Berita</h2>
