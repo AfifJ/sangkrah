@@ -25,6 +25,7 @@ import VoucherDetail from "./components/DetailVoucher"
 import SortingGuide from "./screens/SortingGuide"
 import MyVoucher from "./screens/MyVoucher"
 import AboutSangkrah from "./screens/AboutSangkrah"
+import InboxDetail from "./screens/InboxDetail"
 
 const App = () => {
   const router = createBrowserRouter([
@@ -67,7 +68,16 @@ const App = () => {
         },
         {
           path: "inbox",
-          element: <Inbox />,
+          children: [
+            {
+              index: true,
+              element: <Inbox />,
+            },
+            {
+              path: "/inbox/:id",
+              element: <InboxDetail />,
+            },
+          ],
         },
         {
           path: "recycle",
@@ -127,6 +137,7 @@ const LayoutNav = () => {
     location.pathname === "/" ||
     location.pathname.startsWith("/transaksi") ||
     location.pathname.startsWith("/guide") ||
+    location.pathname.startsWith("/inbox") ||
     location.pathname === "/pickup" ||
     location.pathname.startsWith("/redeem") ||
     location.pathname === "/profile" ||
