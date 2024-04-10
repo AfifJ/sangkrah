@@ -1,28 +1,57 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 // import backgroundImage from "./assets/background-image.jpg"; // Impor file gambar latar belakang
 // import logo from "./assets/logo.png"; // Impor file logo
 
 const Register = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [error, setError] = useState("")
+  const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your registration logic here
-  };
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long.")
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError("Password and Confirm Password must match.")
+      return
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, email, password }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        // Simpan ID pengguna ke localStorage
+        localStorage.setItem("userId", data.user.id)
+        // Navigasi ke halaman lain setelah registrasi berhasil
+        navigate("/login")
+      } else {
+        throw new Error("Registration failed")
+      }
+    } catch (error) {
+      console.error("Error registering:", error)
+      // Handle error registrasi, misalnya tampilkan pesan error ke pengguna
+      setError("Registration failed. Please try again later.")
+    }
+  }
 
   return (
-    <div
-      className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8"
-      // style={{
-      //   backgroundImage: `url(${backgroundImage})`,
-      //   backgroundSize: "cover",
-      //   backgroundPosition: "center",
-      // }}
-    >
+    <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
         <div className="mb-6 flex justify-center">
           <img src={"logo"} alt="Logo" className="h-12 w-12" />
@@ -32,6 +61,9 @@ const Register = () => {
             Register
           </h2>
         </div>
+        {error && (
+          <p className="my-2 text-center text-sm text-red-500">{error}</p>
+        )}
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <input type="hidden" name="remember" value="true" />
           <div className="-space-y-px rounded-md shadow-sm">
@@ -103,7 +135,7 @@ const Register = () => {
           <div>
             <button
               type="submit"
-              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-300"
+              className="group relative flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
               <span className="mr-2">Register</span>
               <svg
@@ -126,14 +158,14 @@ const Register = () => {
           Already have an account?
           <Link
             to="/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500 transition duration-300"
+            className="font-medium text-indigo-600 transition duration-300 hover:text-indigo-500"
           >
             Login
           </Link>
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

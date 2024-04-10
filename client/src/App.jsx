@@ -26,97 +26,104 @@ import SortingGuide from "./screens/SortingGuide"
 import MyVoucher from "./screens/MyVoucher"
 import AboutSangkrah from "./screens/AboutSangkrah"
 import InboxDetail from "./screens/InboxDetail"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 const App = () => {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <LayoutNav />,
+      path: "/login",
+      element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      element: <ProtectedRoute />,
       children: [
         {
-          index: true,
-          element: <Home />,
-        },
-        {
-          path: "transaksi",
-          children: [
-            { index: true, element: <Transaksi /> },
-            { path: "detail", element: <DetailHistory /> },
-          ],
-        },
-        {
-          path: "pickup",
-          element: <Pickup />,
-        },
-        {
-          path: "/guide/:id",
-          element: <SortingGuide />,
-        },
-        {
-          path: "redeem",
-          children: [
-            { index: true, element: <Redeem /> },
-            { path: "detail", element: <VoucherDetail /> },
-          ],
-        },
-        {
-          path: "topup",
-          children: [
-            { index: true, element: <Topup /> },
-            { path: "confirmation", element: <TopupDetail /> },
-          ],
-        },
-        {
-          path: "inbox",
+          path: "/",
+          element: <LayoutNav />,
           children: [
             {
               index: true,
-              element: <Inbox />,
+              element: <Home />,
             },
             {
-              path: "/inbox/:id",
-              element: <InboxDetail />,
-            },
-          ],
-        },
-        {
-          path: "recycle",
-          element: <Recycle />,
-        },
-        {
-          path: "buang",
-          element: <Buang />,
-        },
-        {
-          path: "login",
-          element: <Login />,
-        },
-        {
-          path: "register",
-          element: <Register />,
-        },
-        {
-          path: "profile",
-          children: [
-            {
-              index: true,
-              element: <Profile />,
+              path: "transaksi",
+              children: [
+                { index: true, element: <Transaksi /> },
+                { path: "detail", element: <DetailHistory /> },
+              ],
             },
             {
-              path: "my-voucher",
-              element: <MyVoucher />,
+              path: "pickup",
+              element: <Pickup />,
             },
             {
-              path: "edit",
-              element: <ProfileEdit />,
+              path: "/guide/:id",
+              element: <SortingGuide />,
             },
             {
-              path: "update-password",
-              element: <ProfileNewPassword />,
+              path: "redeem",
+              children: [
+                { index: true, element: <Redeem /> },
+                { path: "detail", element: <VoucherDetail /> },
+              ],
             },
             {
-              path: "about",
-              element: <AboutSangkrah />,
+              path: "topup",
+              children: [
+                { index: true, element: <Topup /> },
+                { path: "confirmation", element: <TopupDetail /> },
+              ],
+            },
+            {
+              path: "inbox",
+              children: [
+                {
+                  index: true,
+                  element: <Inbox />,
+                },
+                {
+                  path: "/inbox/:id",
+                  element: <InboxDetail />,
+                },
+              ],
+            },
+            {
+              path: "recycle",
+              element: <Recycle />,
+            },
+            {
+              path: "buang",
+              element: <Buang />,
+            },
+
+            {
+              path: "profile",
+              children: [
+                {
+                  index: true,
+                  element: <Profile />,
+                },
+                {
+                  path: "my-voucher",
+                  element: <MyVoucher />,
+                },
+                {
+                  path: "edit",
+                  element: <ProfileEdit />,
+                },
+                {
+                  path: "update-password",
+                  element: <ProfileNewPassword />,
+                },
+                {
+                  path: "about",
+                  element: <AboutSangkrah />,
+                },
+              ],
             },
           ],
         },
