@@ -8,12 +8,47 @@ import { useEffect, useState } from "react"
 import Guide from "../components/Guide"
 
 const Home = () => {
+  const [profileData, setProfileData] = useState(null);
+
+  useEffect(() => {
+  	fetchProfileFromAPI();
+  }, []);
+
+  const fetchProfileFromAPI = async () => {
+  	try {
+  	  const response = await fetch("http://127.0.0.1:8000/api/users/1");
+  	  const data = await response.json();
+	    console.log(data);
+
+  	  setProfileData(data); // Mengambil data dari respons JSON yang diberikan oleh Laravel
+  	} catch (error) {
+  	  console.error("Error fetching profile data:", error);
+  	}
+  };
+    
+  function formatRupiah(angka) {
+    var reverse = angka.toString().split("").reverse().join("");
+    var ribuan = reverse.match(/\d{1,3}/g);
+    ribuan = ribuan.join(",").split("").reverse().join("");
+    return "Rp" + ribuan;
+  }
+
+	console.log(profileData?.id);
+  const profile = {
+		id: profileData ? profileData.id : 1, // Menggunakan nilai profileData.id jika tersedia, jika tidak, gunakan nilai default 1
+		username: profileData ? profileData.fullname : "Omar Faruukh", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
+		avatar: profileData ? profileData.profile_pict : "./avatar.png", // Menggunakan nilai profileData.profile_pict jika tersedia, jika tidak, gunakan nilai default "./avatar.png"
+    location : profileData ? `${profileData.kelurahan}, ${profileData.kecamatan}, ${profileData.kabupaten}, ${profileData.province}` : "unknown",
+    saldo : formatRupiah(profileData ? profileData.balance : 0),
+    point : profileData ? profileData.point : 0,
+		notification: profileData ? profileData.notification : 4, // Menggunakan nilai profileData.notification jika tersedia, jika tidak, gunakan nilai default 4
+	};
   return (
     <>
       <div className="mx-5 mt-4 flex items-center justify-between">
         <div>
           <p className="text-sm">Selamat Pagi</p>
-          <p className="text-xl font-bold">John Doe</p>
+          <p className="text-xl font-bold">{profile.username}</p>
         </div>
         <Link
           to="/inbox"
@@ -39,7 +74,7 @@ const Home = () => {
             />
           </svg>
         </div>
-        <div className="text-sm">Pakembinangun, Pakem, Sleman</div>
+        <div className="text-sm">{profile.location}</div>
       </div>
 
       <div className="relative mx-4 mt-4 min-h-44 overflow-clip rounded-3xl bg-[#138B1F] bg-opacity-25 px-5 py-3">
@@ -111,7 +146,7 @@ const Home = () => {
             </div>
           </div>
           <div>
-            <p className="text-xl font-semibold">Rp128,887</p>
+            <p className="text-xl font-semibold">{profile.saldo}</p>
             <p className="text-sm text-base-200 opacity-70">Topup Saldo</p>
           </div>
         </Link>
@@ -125,7 +160,7 @@ const Home = () => {
             </div>
           </div>
           <div>
-            <p className="text-xl font-semibold">55 Poin</p>
+            <p className="text-xl font-semibold">{profile.point} Poin</p>
             <p className="text-sm text-base-200 opacity-70">Tukar Poin</p>
           </div>
         </Link>
