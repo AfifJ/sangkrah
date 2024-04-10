@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 // import backgroundImage from "./assets/background-image.jpg"; // Impor file gambar latar belakang
@@ -11,6 +11,15 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const navigate = useNavigate()
+
+  const localNavigate = useNavigate()
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId")
+    if (userId) {
+      localNavigate("/")
+    }
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()

@@ -1,12 +1,20 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [error, setError] = useState("") 
+  const [error, setError] = useState("")
   const navigate = useNavigate()
+  const localNavigate = useNavigate()
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId")
+    if (userId) {
+      localNavigate("/") // Menggunakan localNavigate untuk navigasi
+    }
+  }, []) // Menambahkan localNavigate ke dalam dependency array
 
   const handleSubmit = async (e) => {
     e.preventDefault()

@@ -1,51 +1,61 @@
 import { EnvelopeIcon } from "@heroicons/react/24/outline"
 import RecycleIcon from "../assets/RecycleIcon"
 import TrashIcon from "../assets/TrashIcon"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { CircleStackIcon, WalletIcon } from "@heroicons/react/24/solid"
 import SortingGuide from "./SortingGuide"
 import { useEffect, useState } from "react"
 import Guide from "../components/Guide"
 
 const Home = () => {
-  const [profileData, setProfileData] = useState(null);
+  const [profileData, setProfileData] = useState(null)
+  const navigate = useNavigate() // Mendapatkan fungsi navigasi
 
   useEffect(() => {
-  	fetchProfileFromAPI();
-  }, []);
+    const fetchProfileFromAPI = async () => {
+      try {
+        const userId = sessionStorage.getItem("userId")
+        console.log(userId)
+        const apiUrl = `http://127.0.0.1:8000/api/users/${userId}`
+        const response = await fetch(apiUrl)
+        const data = await response.json()
+        //console.log(data);
 
-  const fetchProfileFromAPI = async () => {
-  	try {
-      const userId = sessionStorage.getItem("userId");
-      console.log(userId);
-      const apiUrl = `http://127.0.0.1:8000/api/users/${userId}`;
-  	  const response = await fetch(apiUrl);
-  	  const data = await response.json();
-	    //console.log(data);
+        setProfileData(data) // Mengambil data dari respons JSON yang diberikan oleh Laravel
+      } catch (error) {
+        console.error("Error fetching profile data:", error)
+      }
+    }
 
-  	  setProfileData(data); // Mengambil data dari respons JSON yang diberikan oleh Laravel
-  	} catch (error) {
-  	  console.error("Error fetching profile data:", error);
-  	}
-  };
-    
+    fetchProfileFromAPI()
+  }, [])
+
+  useEffect(() => {
+    const userId = sessionStorage.getItem("userId")
+    if (!userId) {
+      navigate("/login") // Jika userId tidak tersedia, navigasi ke halaman login
+    }
+  }, [])
+
   function formatRupiah(angka) {
-    var reverse = angka.toString().split("").reverse().join("");
-    var ribuan = reverse.match(/\d{1,3}/g);
-    ribuan = ribuan.join(",").split("").reverse().join("");
-    return "Rp" + ribuan;
+    var reverse = angka.toString().split("").reverse().join("")
+    var ribuan = reverse.match(/\d{1,3}/g)
+    ribuan = ribuan.join(",").split("").reverse().join("")
+    return "Rp" + ribuan
   }
 
-	//console.log(profileData?.id);
+  //console.log(profileData?.id);
   const profile = {
-		id: profileData ? profileData.id : 1, // Menggunakan nilai profileData.id jika tersedia, jika tidak, gunakan nilai default 1
-		username: profileData ? profileData.username : "Omar Faruukh", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
-		avatar: profileData ? profileData.profile_pict : "./avatar.png", // Menggunakan nilai profileData.profile_pict jika tersedia, jika tidak, gunakan nilai default "./avatar.png"
-    location : profileData ? `${profileData.kelurahan}, ${profileData.kecamatan}, ${profileData.kabupaten}, ${profileData.province}` : "unknown",
-    saldo : formatRupiah(profileData ? profileData.balance : 0),
-    point : profileData ? profileData.point : 0,
-		notification: profileData ? profileData.notification : 4, // Menggunakan nilai profileData.notification jika tersedia, jika tidak, gunakan nilai default 4
-	};
+    id: profileData ? profileData.id : 1, // Menggunakan nilai profileData.id jika tersedia, jika tidak, gunakan nilai default 1
+    username: profileData ? profileData.username : "Omar Faruukh", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
+    avatar: profileData ? profileData.profile_pict : "./avatar.png", // Menggunakan nilai profileData.profile_pict jika tersedia, jika tidak, gunakan nilai default "./avatar.png"
+    location: profileData
+      ? `${profileData.kelurahan}, ${profileData.kecamatan}, ${profileData.kabupaten}, ${profileData.province}`
+      : "unknown",
+    saldo: formatRupiah(profileData ? profileData.balance : 0),
+    point: profileData ? profileData.point : 0,
+    notification: profileData ? profileData.notification : 4, // Menggunakan nilai profileData.notification jika tersedia, jika tidak, gunakan nilai default 4
+  }
   return (
     <>
       <div className="mx-5 mt-4 flex items-center justify-between">
