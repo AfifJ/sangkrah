@@ -27,6 +27,7 @@ import MyVoucher from "./screens/MyVoucher"
 import AboutSangkrah from "./screens/AboutSangkrah"
 import InboxDetail from "./screens/InboxDetail"
 import ProtectedRoute from "./components/ProtectedRoute"
+import NotFoundPage from "./screens/NotFoundPage"
 
 const LayoutNav = () => {
   const location = useLocation()
@@ -164,6 +165,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFoundPage />,
   },
 ])
 
