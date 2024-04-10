@@ -13,7 +13,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
-  const [logoutConfirm, setLogutConfirm] = useState(false)
+  const [logoutConfirm, setLogoutConfirm] = useState(false)
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState(null);
 
@@ -43,19 +43,24 @@ const Profile = () => {
     return "Rp" + ribuan;
   }
 
+  const handleLogout = () => {
+    sessionStorage.removeItem("userId");
+    navigate("/login");
+  }
+
 	//console.log(profileData?.id);
   const profile = {
 		id: profileData ? profileData.id : 1, // Menggunakan nilai profileData.id jika tersedia, jika tidak, gunakan nilai default 1
 		username: profileData ? profileData.username : "Omar Faruukh", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
 		avatar: profileData ? profileData.profile_pict : "./avatar.png", // Menggunakan nilai profileData.profile_pict jika tersedia, jika tidak, gunakan nilai default "./avatar.png"
-    location : profileData ? `${profileData.kelurahan}, ${profileData.kecamatan}, ${profileData.kabupaten}, ${profileData.province}` : "unknown",
+    //location : profileData ? `${profileData.kelurahan}, ${profileData.kecamatan}, ${profileData.kabupaten}, ${profileData.province}` : "unknown",
     saldo : formatRupiah(profileData ? profileData.balance : 0),
     point : profileData ? profileData.point : 0,
 		notification: profileData ? profileData.notification : 4, // Menggunakan nilai profileData.notification jika tersedia, jika tidak, gunakan nilai default 4
 	};
 
   const logoutButtonHandle = () => {
-    setLogutConfirm(!logoutConfirm)
+    setLogoutConfirm(!logoutConfirm)
   }
 
   return (
@@ -162,7 +167,7 @@ const Profile = () => {
       </div>
       <div className="h-24"></div>
 
-      {logoutConfirm && <LogoutModal logoutButtonHandle={logoutButtonHandle} />}
+      {logoutConfirm && <LogoutModal logoutButtonHandle={logoutButtonHandle} handleLogout={handleLogout} />}
     </>
   )
 }
