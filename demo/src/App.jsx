@@ -23,9 +23,6 @@ import Register from "./screens/Register"
 import DetailHistory from "./components/DetailHistory"
 import VoucherDetail from "./components/DetailVoucher"
 import SortingGuide from "./screens/SortingGuide"
-import MyVoucher from "./screens/MyVoucher"
-import AboutSangkrah from "./screens/AboutSangkrah"
-import InboxDetail from "./screens/InboxDetail"
 
 const App = () => {
   const router = createBrowserRouter([
@@ -49,7 +46,7 @@ const App = () => {
           element: <Pickup />,
         },
         {
-          path: "/guide/:id",
+          path: "guide",
           element: <SortingGuide />,
         },
         {
@@ -68,16 +65,7 @@ const App = () => {
         },
         {
           path: "inbox",
-          children: [
-            {
-              index: true,
-              element: <Inbox />,
-            },
-            {
-              path: "/inbox/:id",
-              element: <InboxDetail />,
-            },
-          ],
+          element: <Inbox />,
         },
         {
           path: "recycle",
@@ -103,10 +91,6 @@ const App = () => {
               element: <Profile />,
             },
             {
-              path: "my-voucher",
-              element: <MyVoucher />,
-            },
-            {
               path: "edit",
               element: <ProfileEdit />,
             },
@@ -114,16 +98,13 @@ const App = () => {
               path: "update-password",
               element: <ProfileNewPassword />,
             },
-            {
-              path: "about",
-              element: <AboutSangkrah />,
-            },
           ],
         },
       ],
     },
   ])
 
+  
   return (
     <MapProvider>
       <RouterProvider router={router} />
@@ -137,11 +118,9 @@ const LayoutNav = () => {
     location.pathname === "/" ||
     location.pathname.startsWith("/transaksi") ||
     location.pathname.startsWith("/guide") ||
-    location.pathname.startsWith("/inbox") ||
     location.pathname === "/pickup" ||
     location.pathname.startsWith("/redeem") ||
-    location.pathname === "/profile" ||
-    location.pathname.startsWith("/profile/my-voucher")
+    location.pathname === "/profile"
 
   return (
     <>

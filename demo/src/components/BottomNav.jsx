@@ -17,9 +17,7 @@ import {
 const BottomNav = () => {
   const location = useLocation()
   const isHomeActive =
-    location.pathname === "/" ||
-    location.pathname.startsWith("/guide") ||
-    location.pathname.startsWith("/inbox")
+    location.pathname === "/" || location.pathname === "/guide"
   const isTransaksiActive = location.pathname.startsWith("/transaksi")
   const isPickupActive = location.pathname === "/pickup"
   const isRedeemActive = location.pathname.startsWith("/redeem")

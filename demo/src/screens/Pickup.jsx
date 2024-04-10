@@ -101,7 +101,7 @@ const Pickup = () => {
         }}
         attributionControl={false}
         initialViewState={viewport}
-        mapStyle="mapbox://styles/mapbox/streets-v11"
+        mapStyle="mapbox://styles/mapbox/streets-v12"
         id="pickupMap"
       >
         {markers.map((marker, index) => (
@@ -130,6 +130,7 @@ const Pickup = () => {
           trackUserLocation={true}
           onGeolocate={handleGeolocate}
           showUserLocation={false}
+          // showUserHeading={true}
           style={{
             padding: "1rem",
             borderRadius: "1.5rem",

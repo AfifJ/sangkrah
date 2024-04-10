@@ -6,6 +6,12 @@ const ProfileNewPassword = () => {
 			<BackNavbar link="/profile">Ubah Kata Sandi</BackNavbar>
 
 			<div className="mx-6 my-6">
+				<div className="flex items-center">
+					<img className="w-24 h-2w-24" src="/avatar.png" alt="avatar" />
+					<div className="bg-gray-400 bg-opacity-80 rounded-xl mx-auto font-semibold px-4 py-2">
+						Ubah Foto Profil
+					</div>
+				</div>
 
 				<div className="*:block mt-6">
 					<label className="text-sm font-semibold" htmlFor="password-lama">

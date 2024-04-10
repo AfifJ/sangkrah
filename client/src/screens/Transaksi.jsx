@@ -1,204 +1,141 @@
-import { useState, useEffect } from "react";
+import React, { useState } from "react"
+import { Link } from "react-router-dom"
+
+const historyData = [
+  {
+    id: 1,
+    category: "buangsampah",
+    title: "Buang Sampah Rumah Tangga",
+    description: "Buang sampah rumah tangga seberat 10 kg",
+    amount: 5000,
+    status: "success",
+    date: "2023-05-10",
+  },
+  {
+    id: 2,
+    category: "dauruang",
+    title: "Daur Ulang Plastik",
+    description: "Daur ulang plastik bekas seberat 5 kg",
+    amount: -3000,
+    status: "success",
+    date: "2023-05-09",
+  },
+  {
+    id: 3,
+    category: "voucher",
+    title: "Penukaran Voucher",
+    description: "Penukaran voucher senilai Rp 10.000",
+    amount: -10000,
+    status: "failed",
+    date: "2023-05-08",
+  },
+  // Tambahkan data lainnya sesuai kebutuhan
+]
 
 const Transaksi = () => {
-	const [transactions, setTransactions] = useState([
-		{
-			id: 1,
-			date: "2023-08-01",
-			amount: 100,
-			description: "Transaksi 1",
-			title: "Pembayaran Tagihan",
-			timestamp: 1680326400000, // Timestamp untuk 2023-08-01 00:00:00
-		},
-		{
-			id: 2,
-			date: "2023-08-01",
-			amount: 200,
-			description: "Transaksi 2",
-			title: "Pemasukan Gaji",
-			timestamp: 1680330000000, // Timestamp untuk 2023-08-01 01:00:00
-		},
-		{
-			id: 3,
-			date: "2023-08-02",
-			amount: 300,
-			description: "Transaksi 3",
-			title: "Pembelian Barang",
-			timestamp: 1680412800000, // Timestamp untuk 2023-08-02 00:00:00
-		},
-		{
-			id: 4,
-			date: "2023-08-02",
-			amount: 400,
-			description: "Transaksi 4",
-			title: "Transfer Uang",
-			timestamp: 1680416400000, // Timestamp untuk 2023-08-02 01:00:00
-		},
-	]);
+  const [filterOption, setFilterOption] = useState("")
+  const [sortOrder, setSortOrder] = useState("")
 
-	const sortTransactions = (transactions) => {
-		return transactions.sort(
-			(a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-		);
-	};
+  const currentBalance = 100000 // Saldo saat ini (dummy)
 
-	const [isLoading, setIsLoading] = useState(false);
-	const [noMoreTransactions, setNoMoreTransactions] = useState(false);
+  const categoryIcons = {
+    buangsampah: "🗑️",
+    dauruang: "♻️",
+    voucher: "🎟️",
+  }
 
-	const sortedTransactions = sortTransactions(transactions).reduce(
-		(acc, transaction) => {
-			const date = transaction.date;
-			const group = acc.find((g) => g[0].date === date);
-			if (group) {
-				group.push(transaction);
-			} else {
-				acc.push([transaction]);
-			}
-			return acc;
-		},
-		[]
-	);
+  const filteredData = historyData.filter((transaction) => {
+    if (filterOption === "") return true
+    if (filterOption === "buangsampah")
+      return transaction.category === "buangsampah"
+    if (filterOption === "dauruang") return transaction.category === "dauruang"
+    if (filterOption === "voucher") return transaction.category === "voucher"
+    return true
+  })
 
-	// Fungsi untuk memuat data transaksi tambahan saat di-scroll
-	const loadMoreTransactions = async () => {
-		setIsLoading(true);
-		try {
-			const newTransactions = await fetchAdditionalTransactions();
-			if (Object.keys(newTransactions).length === 0) {
-				setNoMoreTransactions(true);
-			} else {
-				setTransactions((prevTransactions) => ({
-					...prevTransactions,
-					...newTransactions,
-				}));
-			}
-		} catch (error) {
-			console.error("Error fetching additional transactions:", error);
-		} finally {
-			setIsLoading(false);
-		}
-	};
+  const sortedData = filteredData.sort((a, b) => {
+    if (sortOrder === "terbaru") return new Date(b.date) - new Date(a.date)
+    if (sortOrder === "terlama") return new Date(a.date) - new Date(b.date)
+    return 0
+  })
 
-	useEffect(() => {
-		// Panggil fungsi loadMoreTransactions saat komponen di-mount
-		loadMoreTransactions();
-	}, []);
+  return (
+    <>
+      <div className="flex justify-between bg-primary px-5 py-6 text-base-200 text-opacity-90">
+        <h1 className="text-2xl font-bold">History Transaksi</h1>
+        <p className="text-lg font-semibold">
+          Saldo: Rp {currentBalance.toLocaleString()}
+        </p>
+      </div>
+      <div className="relative h-3 w-full bg-primary">
+        <div className="relative h-3 w-full rounded-t-2xl bg-page"></div>
+      </div>
+      <div className="container mx-auto px-4 py-2">
+        <div className="mb-4">
+          <label htmlFor="filter" className="mr-2 font-semibold">
+            Filter:
+          </label>
+          <select
+            id="filter"
+            className="rounded-xl border border-gray-300 px-2 py-1"
+            value={filterOption}
+            onChange={(e) => setFilterOption(e.target.value)}
+          >
+            <option value="">Semua</option>
+            <option value="buangsampah">Buang Sampah</option>
+            <option value="dauruang">Daur Ulang</option>
+            <option value="voucher">Penukaran Voucher</option>
+          </select>
 
-	useEffect(() => {
-		const handleScroll = () => {
-			const scrollHeight = document.documentElement.scrollHeight;
-			const scrollTop = document.documentElement.scrollTop;
-			const clientHeight = document.documentElement.clientHeight;
+          <label htmlFor="sort" className="mx-2 font-semibold">
+            Urutkan:
+          </label>
+          <select
+            id="sort"
+            className="rounded-xl border border-gray-300 px-2 py-1"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
+            <option value="">Default</option>
+            <option value="terbaru">Terbaru</option>
+            <option value="terlama">Terlama</option>
+          </select>
+        </div>
 
-			if (scrollTop + clientHeight >= scrollHeight && !isLoading) {
-				loadMoreTransactions();
-			}
-		};
+        <div className="grid gap-4">
+          {sortedData.map((transaction) => (
+            <Link
+              // to={`/transaksi/${transaction.id}`}
+              to={`/transaksi/detail`}
+              key={transaction.id}
+              className="rounded-2xl border border-gray-300 bg-white p-4"
+            >
+              <div className="flex items-center">
+                <span className="mr-2 text-2xl">
+                  {categoryIcons[transaction.category]}
+                </span>
+                <h2 className="text-lg font-semibold">{transaction.title}</h2>
+                <p className="text-gray-600 ml-auto">{transaction.date}</p>
+              </div>
+              <p className="mb-2 text-gray-600">{transaction.description}</p>
+              <p
+                className={`font-semibold ${
+                  transaction.amount > 0 ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {transaction.amount > 0 ? "+" : "-"} Rp{" "}
+                {Math.abs(transaction.amount).toLocaleString()}
+              </p>
+              <p className="text-gray-500">
+                Status:{" "}
+                {transaction.status === "success" ? "Berhasil" : "Gagal"}
+              </p>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </>
+  )
+}
 
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, [isLoading, loadMoreTransactions]);
-
-	return (
-		<>
-			<div className="bg-[#3A844F] px-6 pt-8 pb-24 text-white flex justify-between items-center">
-				<div>
-					<div className="font-light">Saldo Kamu</div>
-					<div className="text-3xl font-semibold">Rp128,887</div>
-				</div>
-				<div className="border border-white rounded-full">
-					<img className="w-14 h-14 rounded-full" src="avatar.png" alt="" />
-				</div>
-			</div>
-			<div className="px-6 pt-4 bg-gray-100 -mt-8 rounded-t-3xl">
-				<div className="flex justify-between items-center mb-4">
-					<h2 className="font-bold text-2xl">Transaksi Saya</h2>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth={1.5}
-						stroke="currentColor"
-						className="w-6 h-6"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-						/>
-					</svg>
-				</div>
-				<div className="grid grid-cols-1 gap-4">
-  {sortedTransactions.map((transactionGroup, index) => (
-    <div key={index} className="mb-4">
-      <div className="text-gray-500 mb-2">{transactionGroup[0].date}</div>
-      {transactionGroup.map((transaction) => (
-        <TransaksiHarian key={transaction.id} transaksi={transaction} />
-      ))}
-    </div>
-  ))}
-</div>
-				{isLoading ? (
-					<div className="text-center mt-4">Loading...</div>
-				) : noMoreTransactions ? (
-					<div className="text-center mt-4">Tidak ada transaksi lagi</div>
-				) : null}
-			</div>
-		</>
-	);
-};
-
-const TransaksiHarian = ({ transaksi }) => {
-	return (
-		<div className="bg-white rounded-lg shadow-md p-4 mb-4 flex items-center">
-			<div className="mr-4">
-				{transaksi.amount < 0 ? (
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth={1.5}
-						stroke="currentColor"
-						className="w-6 h-6 text-red-500"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-						/>
-					</svg>
-				) : (
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						strokeWidth={1.5}
-						stroke="currentColor"
-						className="w-6 h-6 text-green-500"
-					>
-						<path
-							strokeLinecap="round"
-							strokeLinejoin="round"
-							d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
-						/>
-					</svg>
-				)}
-			</div>
-			<div className="flex-1">
-				<div className="flex justify-between items-center mb-2">
-					<div className="font-semibold">{transaksi.title}</div>
-					<div
-						className={`font-bold ${
-							transaksi.amount < 0 ? "text-red-500" : "text-green-500"
-						}`}
-					>
-						Rp {Math.abs(transaksi.amount)}
-					</div>
-				</div>
-				<div className="text-gray-500">{transaksi.description}</div>
-			</div>
-		</div>
-	);
-};
-
-export default Transaksi;
+export default Transaksi

@@ -1,39 +1,13 @@
 import React, { useState } from "react"
-import { Link, Redirect } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await fetch("http://127.0.0.1:8000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // Simpan ID pengguna ke session storage
-        sessionStorage.setItem("userId", data.id);
-        // Redirect atau lakukan hal lain setelah login berhasil
-        setIsLoggedIn(true);
-      } else {
-        throw new Error("Login failed");
-      }
-    } catch (error) {
-      console.error("Error logging in:", error);
-      // Handle login error, e.g., show error message to the user
-    }
-  };
-  if (isLoggedIn) {
-    return <Redirect to="/" />; // Redirect ke halaman dashboard setelah login berhasil
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // Handle login logic here
   }
 
   return (
