@@ -127,8 +127,10 @@ class UsersController extends Controller
         return new PostResource(true, 'Updated!', $post);
     }
     public function show($id){
-        $post = Users::find($id);
-        
-        return new PostResource(true, 'Data detail!', $post);
+        $user = Users::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+        return response()->json($user, 200);
     }
 }
