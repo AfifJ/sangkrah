@@ -12,20 +12,11 @@ class Users extends Model
 
     protected $fillable = [
         'username',
-        'fullname',
         'email',
         'password',
-        'phone',
-        'birth_date',
         'profile_pict',
         'balance',
         'point',
-        'province',
-        'kabupaten',
-        'kecamatan',
-        'kelurahan',
-        'detail',
-        'coordinate',
     ];
 
     protected function userimg(): Attribute{

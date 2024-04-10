@@ -24,12 +24,6 @@ class UsersController extends Controller
             'email'         => 'required|email',
             'password'      => 'required',
             'profile_pict'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'province'      => 'required',
-            'kabupaten'     => 'required',
-            'kecamatan'     => 'required',
-            'kelurahan'     => 'required',
-            'detail'        => 'required',
-            'coordinate'    => 'required',
         ]);
 
         if($validator->fails()){
@@ -45,38 +39,20 @@ class UsersController extends Controller
 
         $post = Users::create([
             'username'      => $request->username,
-            'fullname'      => $request->fullname,
             'email'         => $request->email,
             'password'      => $hashedPassword,
-            'phone'         => $request->phone,
-            'birth_date'    => $request->birth_date,
             'profile_pict'  => $image->hashName(),
             'balance'       => $request->balance ?? 0,
             'point'         => $request->point ?? 0,
-            'province'      => $request->province,
-            'kabupaten'     => $request->kabupaten,
-            'kecamatan'     => $request->kecamatan,
-            'kelurahan'     => $request->kelurahan,
-            'detail'        => $request->detail,
-            'coordinate'    => $request->coordinate,
         ]);
         return new PostResource(true, 'Insert user Success!', $post);
     }
     public function update(Request $request,$id){
         $validator = Validator::make($request->all(),[
             'username'      => 'required',
-            'fullname'      => 'required',
             'email'         => 'required|email',
             'password'      => 'required',
-            'phone'         => 'required',
-            'birth_date'    => 'required|date',
             'profile_pict'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'province'      => 'required',
-            'kabupaten'     => 'required',
-            'kecamatan'     => 'required',
-            'kelurahan'     => 'required',
-            'detail'        => 'required',
-            'coordinate'    => 'required',
         ]);
         if($validator->fails()){
             return response()->json($validator->errors(),442);
@@ -90,32 +66,14 @@ class UsersController extends Controller
 
             $post->update([
                 'username'      => $request->username,
-                'fullname'      => $request->fullname,
                 'email'         => $request->email,
-                'phone'         => $request->phone,
-                'birth_date'    => $request->birth_date,
                 'profile_pict'  => $image->hashName(),
-                'province'      => $request->province,
-                'kabupaten'     => $request->kabupaten,
-                'kecamatan'     => $request->kecamatan,
-                'kelurahan'     => $request->kelurahan,
-                'detail'        => $request->detail,
-                'coordinate'    => $request->coordinate,
             ]);
         }
         else{
             $post->update([
                 'username'      => $request->username,
-                'fullname'      => $request->fullname,
                 'email'         => $request->email,
-                'phone'         => $request->phone,
-                'birth_date'    => $request->birth_date,
-                'province'      => $request->province,
-                'kabupaten'     => $request->kabupaten,
-                'kecamatan'     => $request->kecamatan,
-                'kelurahan'     => $request->kelurahan,
-                'detail'        => $request->detail,
-                'coordinate'    => $request->coordinate,
             ]);
         }
         return new PostResource(true, 'Updated!', $post);
