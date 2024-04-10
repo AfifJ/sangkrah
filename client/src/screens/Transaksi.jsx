@@ -44,6 +44,26 @@ const Transaksi = () => {
     voucher: "🎟️",
   }
 
+  const [transactions, setTransactions] = useState([])
+  const userId = sessionStorage.getItem("userId")
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/transactions?user_id=${userId}`
+        )
+        setTransactions(response.data)
+      } catch (error) {
+        console.error("Error fetching transactions:", error)
+      }
+    }
+
+    if (userId) {
+      fetchTransactions()
+    }
+  }, [userId])
+
   const filteredData = historyData.filter((transaction) => {
     if (filterOption === "") return true
     if (filterOption === "buangsampah")
@@ -115,7 +135,7 @@ const Transaksi = () => {
                   {categoryIcons[transaction.category]}
                 </span>
                 <h2 className="text-lg font-semibold">{transaction.title}</h2>
-                <p className="text-gray-600 ml-auto">{transaction.date}</p>
+                <p className="ml-auto text-gray-600">{transaction.date}</p>
               </div>
               <p className="mb-2 text-gray-600">{transaction.description}</p>
               <p
