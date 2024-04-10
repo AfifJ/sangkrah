@@ -6,12 +6,18 @@ import { CircleStackIcon, WalletIcon } from "@heroicons/react/24/solid"
 import SortingGuide from "./SortingGuide"
 import { useEffect, useState } from "react"
 import Guide from "../components/Guide"
+import axios from "axios"
 
 const Home = () => {
   const [profileData, setProfileData] = useState(null)
-  const navigate = useNavigate() // Mendapatkan fungsi navigasi
-
+  const navigate = useNavigate()
+  const [address, setAddress] = useState("")
   useEffect(() => {
+    const userId = sessionStorage.getItem("userId")
+    if (!userId) {
+      navigate("/login") // Jika userId tidak tersedia, navigasi ke halaman login
+    }
+
     const fetchProfileFromAPI = async () => {
       try {
         const userId = sessionStorage.getItem("userId")
@@ -28,12 +34,18 @@ const Home = () => {
     }
 
     fetchProfileFromAPI()
-  }, [])
 
-  useEffect(() => {
-    const userId = sessionStorage.getItem("userId")
-    if (!userId) {
-      navigate("/login") // Jika userId tidak tersedia, navigasi ke halaman login
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords
+
+        const response = await axios.get(
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${longitude},${latitude}.json?access_token=${import.meta.env.VITE_MAPBOX_KEY ?? process.env.VITE_MAPBOX_KEY}`
+        )
+        setAddress(response.data.features[0].place_name)
+      })
+    } else {
+      console.log("Geolocation is not supported by this browser.")
     }
   }, [])
 
@@ -49,9 +61,7 @@ const Home = () => {
     id: profileData ? profileData.id : 1, // Menggunakan nilai profileData.id jika tersedia, jika tidak, gunakan nilai default 1
     username: profileData ? profileData.username : "Omar Faruukh", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
     avatar: profileData ? profileData.profile_pict : "./avatar.png", // Menggunakan nilai profileData.profile_pict jika tersedia, jika tidak, gunakan nilai default "./avatar.png"
-    location: profileData
-      ? `${profileData.kelurahan}, ${profileData.kecamatan}, ${profileData.kabupaten}, ${profileData.province}`
-      : "unknown",
+    // location: address ?? "unknown",
     saldo: formatRupiah(profileData ? profileData.balance : 0),
     point: profileData ? profileData.point : 0,
     notification: profileData ? profileData.notification : 4, // Menggunakan nilai profileData.notification jika tersedia, jika tidak, gunakan nilai default 4
@@ -87,7 +97,7 @@ const Home = () => {
             />
           </svg>
         </div>
-        <div className="text-sm">{profile.location}</div>
+        <div className="text-sm">{address ?? "Loading..."}</div>
       </div>
 
       <div className="relative mx-4 mt-4 min-h-44 overflow-clip rounded-3xl bg-[#138B1F] bg-opacity-25 px-5 py-3">

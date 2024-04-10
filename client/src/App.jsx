@@ -2,10 +2,9 @@ import { MapProvider } from "react-map-gl"
 import BottomNav from "./components/BottomNav"
 import Home from "./screens/Home"
 import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
+  createBrowserRouter,
   Outlet,
+  RouterProvider,
   useLocation,
 } from "react-router-dom"
 import Transaksi from "./screens/Transaksi"
@@ -29,56 +28,11 @@ import AboutSangkrah from "./screens/AboutSangkrah"
 import InboxDetail from "./screens/InboxDetail"
 import ProtectedRoute from "./components/ProtectedRoute"
 
-const App = () => {
-  return (
-    <MapProvider>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<LayoutNav />}>
-              <Route index element={<Home />} />
-              <Route path="transaksi" element={<Transaksi />}>
-                <Route path="detail" element={<DetailHistory />} />
-              </Route>
-              <Route path="pickup" element={<Pickup />} />
-              <Route path="guide/:id" element={<SortingGuide />} />
-              <Route path="redeem" element={<Redeem />}>
-                <Route path="detail" element={<VoucherDetail />} />
-              </Route>
-              <Route path="topup" element={<Topup />}>
-                <Route path="confirmation" element={<TopupDetail />} />
-              </Route>
-              <Route path="inbox" element={<Inbox />}>
-                <Route path=":id" element={<InboxDetail />} />
-              </Route>
-              <Route path="recycle" element={<Recycle />} />
-              <Route path="buang" element={<Buang />} />
-              <Route path="profile" element={<Profile />}>
-                <Route path="my-voucher" element={<MyVoucher />} />
-                <Route path="edit" element={<ProfileEdit />} />
-                <Route
-                  path="update-password"
-                  element={<ProfileNewPassword />}
-                />
-                <Route path="about" element={<AboutSangkrah />} />
-              </Route>
-            </Route>
-          </Route>
-        </Routes>
-      </Router>
-    </MapProvider>
-  )
-}
-
 const LayoutNav = () => {
   const location = useLocation()
   const isShowing =
     location.pathname === "/" ||
     location.pathname.startsWith("/transaksi") ||
-    location.pathname.startsWith("/guide") ||
-    location.pathname.startsWith("/inbox") ||
     location.pathname === "/pickup" ||
     location.pathname.startsWith("/redeem") ||
     location.pathname === "/profile" ||
@@ -89,9 +43,135 @@ const LayoutNav = () => {
       <div className="mx-auto max-w-xl">
         <Outlet />
       </div>
-
       {isShowing && <BottomNav />}
     </>
+  )
+}
+
+const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/",
+        element: <LayoutNav />,
+        children: [
+          {
+            index: true,
+            element: <Home />,
+          },
+          {
+            path: "transaksi",
+            children: [
+              {
+                index: true,
+                element: <Transaksi />,
+              },
+              {
+                path: "detail",
+                element: <DetailHistory />,
+              },
+            ],
+          },
+          {
+            path: "pickup",
+            element: <Pickup />,
+          },
+          {
+            path: "guide/:id",
+            element: <SortingGuide />,
+          },
+          {
+            path: "redeem",
+            children: [
+              {
+                index: true,
+                element: <Redeem />,
+              },
+              {
+                path: "detail",
+                element: <VoucherDetail />,
+              },
+            ],
+          },
+          {
+            path: "topup",
+            children: [
+              {
+                index: true,
+                element: <Topup />,
+              },
+              {
+                path: "confirmation",
+                element: <TopupDetail />,
+              },
+            ],
+          },
+          {
+            path: "inbox",
+            children: [
+              {
+                index: true,
+                element: <Inbox />,
+              },
+              {
+                path: ":id",
+                element: <InboxDetail />,
+              },
+            ],
+          },
+          {
+            path: "recycle",
+            element: <Recycle />,
+          },
+          {
+            path: "buang",
+            element: <Buang />,
+          },
+          {
+            path: "profile",
+            children: [
+              {
+                index: true,
+                element: <Profile />,
+              },
+              {
+                path: "my-voucher",
+                element: <MyVoucher />,
+              },
+              {
+                path: "edit",
+                element: <ProfileEdit />,
+              },
+              {
+                path: "update-password",
+                element: <ProfileNewPassword />,
+              },
+              {
+                path: "about",
+                element: <AboutSangkrah />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+])
+
+const App = () => {
+  return (
+    <MapProvider>
+      <RouterProvider router={router} />
+    </MapProvider>
   )
 }
 
