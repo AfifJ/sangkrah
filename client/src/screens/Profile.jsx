@@ -10,9 +10,11 @@ import { WalletIcon, CircleStackIcon } from "@heroicons/react/24/solid"
 import { Link } from "react-router-dom"
 import LogoutModal from "../components/LogoutModal"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 const Profile = () => {
   const [logoutConfirm, setLogutConfirm] = useState(false)
+  const navigate = useNavigate();
 
   const logoutButtonHandle = () => {
     setLogutConfirm(!logoutConfirm)

@@ -1,11 +1,11 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
-import { useHistory } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,10 +22,10 @@ const Login = () => {
       if (response.ok) {
         const data = await response.json();
         // Simpan ID pengguna ke session storage
-        sessionStorage.setItem("userId", data.id);
+        console.log(data.user.id);
+        sessionStorage.setItem("userId", data.user.id);
         // Redirect atau lakukan hal lain setelah login berhasil
-        //window.location.href = "/";
-        history.push("/");
+        navigate("/");
       } else {
         throw new Error("Login failed");
       }

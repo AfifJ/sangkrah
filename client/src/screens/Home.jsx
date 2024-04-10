@@ -16,9 +16,9 @@ const Home = () => {
 
   const fetchProfileFromAPI = async () => {
   	try {
-      const userid = sessionStorage.getItem("userId");
-      console.log(userid);
-      const apiUrl = `http://127.0.0.1:8000/api/users/2`;
+      const userId = sessionStorage.getItem("userId");
+      console.log(userId);
+      const apiUrl = `http://127.0.0.1:8000/api/users/${userId}`;
   	  const response = await fetch(apiUrl);
   	  const data = await response.json();
 	    //console.log(data);
