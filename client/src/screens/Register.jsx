@@ -36,10 +36,14 @@ const Register = () => {
 
       if (response.ok) {
         const data = await response.json()
-        // Simpan ID pengguna ke localStorage
-        localStorage.setItem("userId", data.user.id)
-        // Navigasi ke halaman lain setelah registrasi berhasil
-        navigate("/login")
+        if (data && data.user && data.user.id) {
+          // Simpan ID pengguna ke localStorage
+          sessionStorage.setItem("userId", data.user.id)
+          // Navigasi ke halaman lain setelah registrasi berhasil
+          navigate("/login")
+        } else {
+          throw new Error("Invalid response from server")
+        }
       } else {
         throw new Error("Registration failed")
       }

@@ -3,12 +3,13 @@ import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("") 
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/login", {
@@ -17,23 +18,30 @@ const Login = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
-      });
+      })
 
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json()
         // Simpan ID pengguna ke session storage
-        console.log(data.user.id);
-        sessionStorage.setItem("userId", data.user.id);
+        console.log(data.user.id)
+        sessionStorage.setItem("userId", data.user.id)
         // Redirect atau lakukan hal lain setelah login berhasil
-        navigate("/");
+        navigate("/")
       } else {
-        throw new Error("Login failed");
+        const responseData = await response.json()
+        if (response.status === 404) {
+          throw new Error("Account not found.")
+        } else if (response.status === 401) {
+          throw new Error("Incorrect password.")
+        } else {
+          throw new Error(responseData.message || "Login failed.")
+        }
       }
     } catch (error) {
-      console.error("Error logging in:", error);
-      // Handle login error, e.g., show error message to the user
+      console.error("Error logging in:", error)
+      setError(error.message)
     }
-  };
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
@@ -79,7 +87,7 @@ const Login = () => {
               />
             </div>
           </div>
-
+          {error && <div className="mt-2 text-sm text-red-600">{error}</div>}
           <div>
             <button
               type="submit"

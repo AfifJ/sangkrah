@@ -12,77 +12,83 @@ use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
-    public function index()
-    {
-        $posts = Users::latest()->paginate(5);
+  public function index()
+  {
+    $posts = Users::latest()->paginate(5);
 
-        return new PostResource(true, 'List Data Users', $posts);
+    return new PostResource(true, 'List Data Users', $posts);
+  }
+  public function store(Request $request)
+  {
+    $validator = Validator::make($request->all(), [
+      'username' => 'required',
+      'email' => 'required|email',
+      'password' => 'required',
+      'profile_pict' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    if ($validator->fails()) {
+      return response()->json($validator->errors(), 422);
     }
-    public function store(Request $request){
-        $validator = Validator::make($request->all(), [
-            'username'      => 'required',
-            'email'         => 'required|email',
-            'password'      => 'required',
-            'profile_pict'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
 
-        if($validator->fails()){
-            return response()->json($validator->errors(), 422);
-        }
-
-        $password = $request->password;
-        $hashedPassword = Hash::make($password);
+    $password = $request->password;
+    $hashedPassword = Hash::make($password);
 
 
-        $image = $request->file('profile_pict');
-        $image->storeAs('public/users', $image->hashName());
-
-        $post = Users::create([
-            'username'      => $request->username,
-            'email'         => $request->email,
-            'password'      => $hashedPassword,
-            'profile_pict'  => $image->hashName(),
-            'balance'       => $request->balance ?? 0,
-            'point'         => $request->point ?? 0,
-        ]);
-        return new PostResource(true, 'Insert user Success!', $post);
+    if ($request->hasFile('profile_pict')) {
+      $image = $request->file('profile_pict');
+      $path = $image->storeAs('public/users', $image->hashName());
+    } else {
+      $path = null;
     }
-    public function update(Request $request,$id){
-        $validator = Validator::make($request->all(),[
-            'username'      => 'required',
-            'email'         => 'required|email',
-            'password'      => 'required',
-            'profile_pict'  => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-        if($validator->fails()){
-            return response()->json($validator->errors(),442);
-        }
-        $post = Users::find($id);
-        if($request->hasFile('image')){
-            $image = $request->file('image');
-            $image->storeAs('public/posts',$image->hashName());
 
-            Storage::delete('public/posts/' .basename($post->image));
+    $post = Users::create([
+      'username' => $request->username,
+      'email' => $request->email,
+      'password' => $hashedPassword,
+      'profile_pict' => $path, // Simpan nama file gambar ke database
+      'balance' => $request->balance ?? 0,
+      'point' => $request->point ?? 0,
+    ]);
+    return new PostResource(true, 'Insert user Success!', $post);
+  }
+  public function update(Request $request, $id)
+  {
+    $validator = Validator::make($request->all(), [
+      'username' => 'required',
+      'email' => 'required|email',
+      'password' => 'required',
+      'profile_pict' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+    if ($validator->fails()) {
+      return response()->json($validator->errors(), 442);
+    }
+    $post = Users::find($id);
+    if ($request->hasFile('image')) {
+      $image = $request->file('image');
+      $image->storeAs('public/posts', $image->hashName());
 
-            $post->update([
-                'username'      => $request->username,
-                'email'         => $request->email,
-                'profile_pict'  => $image->hashName(),
-            ]);
-        }
-        else{
-            $post->update([
-                'username'      => $request->username,
-                'email'         => $request->email,
-            ]);
-        }
-        return new PostResource(true, 'Updated!', $post);
+      Storage::delete('public/posts/' . basename($post->image));
+
+      $post->update([
+        'username' => $request->username,
+        'email' => $request->email,
+        'profile_pict' => $image->hashName(),
+      ]);
+    } else {
+      $post->update([
+        'username' => $request->username,
+        'email' => $request->email,
+      ]);
     }
-    public function show($id){
-        $user = Users::find($id);
-        if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
-        }
-        return response()->json($user, 200);
+    return new PostResource(true, 'Updated!', $post);
+  }
+  public function show($id)
+  {
+    $user = Users::find($id);
+    if (!$user) {
+      return response()->json(['message' => 'User not found'], 404);
     }
+    return response()->json($user, 200);
+  }
 }
