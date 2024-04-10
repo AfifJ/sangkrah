@@ -11,11 +11,12 @@ use Illuminate\Support\Facades\Validator;
 
 class TransactionsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Transactions::latest()->paginate(5);
+        $user_id = $request->input('user_id'); // Ambil user_id dari request
+        $transactions = Transactions::where('user_id', $user_id)->latest()->paginate(5);
 
-        return new PostResource(true, 'List Data transaksi', $posts);
+        return new PostResource(true, 'List Data Transaksi', $transactions);
     }
     public function store(Request $request){
         $validator = Validator::make($request->all(), [

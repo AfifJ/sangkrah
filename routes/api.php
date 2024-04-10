@@ -19,7 +19,7 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::post('/login', [App\Http\Controllers\API\AuthController::class, 'login']);
-Route::post('/logout', [App\Http\Controllers\API\AuthController::class, 'logout']);
+Route::put('/passchange/{user_id}', [App\Http\Controllers\API\UsersController::class, 'updatePassword']);
 
 Route::apiResource('/users', App\Http\Controllers\API\UsersController::class);
 Route::apiResource('/partners', App\Http\Controllers\API\PartnersController::class);

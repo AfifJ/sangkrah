@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 // import backgroundImage from "./assets/background-image.jpg"; // Impor file gambar latar belakang
@@ -11,15 +11,6 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [error, setError] = useState("")
   const navigate = useNavigate()
-
-  const localNavigate = useNavigate()
-
-  useEffect(() => {
-    const userId = sessionStorage.getItem("userId")
-    if (userId) {
-      localNavigate("/")
-    }
-  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -45,14 +36,10 @@ const Register = () => {
 
       if (response.ok) {
         const data = await response.json()
-        if (data && data.user && data.user.id) {
-          // Simpan ID pengguna ke localStorage
-          sessionStorage.setItem("userId", data.user.id)
-          // Navigasi ke halaman lain setelah registrasi berhasil
-          navigate("/login")
-        } else {
-          throw new Error("Invalid response from server")
-        }
+        // Simpan ID pengguna ke localStorage
+        localStorage.setItem("userId", data.id)
+        // Navigasi ke halaman lain setelah registrasi berhasil
+        navigate("/login")
       } else {
         throw new Error("Registration failed")
       }

@@ -59,7 +59,7 @@ const Home = () => {
   //console.log(profileData?.id);
   const profile = {
     id: profileData ? profileData.id : 1, // Menggunakan nilai profileData.id jika tersedia, jika tidak, gunakan nilai default 1
-    username: profileData ? profileData.username : "Omar Faruukh", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
+    username: profileData ? profileData.username : "User Name", // Menggunakan nilai profileData.username jika tersedia, jika tidak, gunakan nilai default "Omar Faruukh"
     avatar: profileData ? profileData.profile_pict : "./avatar.png", // Menggunakan nilai profileData.profile_pict jika tersedia, jika tidak, gunakan nilai default "./avatar.png"
     // location: address ?? "unknown",
     saldo: formatRupiah(profileData ? profileData.balance : 0),
