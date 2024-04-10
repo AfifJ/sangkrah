@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -38,6 +39,10 @@ class UsersController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
+        $password = $request->password;
+        $hashedPassword = Hash::make($password);
+
+
         $image = $request->file('profile_pict');
         $image->storeAs('public/users', $image->hashName());
 
@@ -45,7 +50,7 @@ class UsersController extends Controller
             'username'      => $request->username,
             'fullname'      => $request->fullname,
             'email'         => $request->email,
-            'password'      => $request->password,
+            'password'      => $hashedPassword,
             'phone'         => $request->phone,
             'birth_date'    => $request->birth_date,
             'profile_pict'  => $image->hashName(),
@@ -92,7 +97,6 @@ class UsersController extends Controller
                 'username'      => $request->username,
                 'fullname'      => $request->fullname,
                 'email'         => $request->email,
-                'password'      => $request->password,
                 'phone'         => $request->phone,
                 'birth_date'    => $request->birth_date,
                 'profile_pict'  => $image->hashName(),
@@ -111,7 +115,6 @@ class UsersController extends Controller
                 'username'      => $request->username,
                 'fullname'      => $request->fullname,
                 'email'         => $request->email,
-                'password'      => $request->password,
                 'phone'         => $request->phone,
                 'birth_date'    => $request->birth_date,
                 'balance'       => $request->balance,
