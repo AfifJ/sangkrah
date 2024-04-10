@@ -1,7 +1,11 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 
-const LogoutModal = ({ logoutButtonHandle }) => {
+const LogoutModal = ({ logoutButtonHandle, handleLogout }) => {
+	const confirmLogout = () => {
+		handleLogout();
+		logoutButtonHandle();
+	}
 	return (
 		<div className="bg-gray-800 flex bg-opacity-60 fixed bottom-0 top-0 left-0 right-0 z-50">
 			<div
@@ -20,7 +24,7 @@ const LogoutModal = ({ logoutButtonHandle }) => {
 						Data login anda tidak akan disimpan di perangkat ini.
 					</p>
 					<div className="flex gap-x-5 mt-8">
-						<button className="bg-stone-700 hover:bg-stone-500 text-white w-full py-3 rounded-xl">
+						<button onClick={confirmLogout} className="bg-stone-700 hover:bg-stone-500 text-white w-full py-3 rounded-xl">
 							Yakin
 						</button>
 						<button

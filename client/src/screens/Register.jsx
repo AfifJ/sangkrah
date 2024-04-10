@@ -37,7 +37,7 @@ const Register = () => {
       if (response.ok) {
         const data = await response.json()
         // Simpan ID pengguna ke localStorage
-        localStorage.setItem("userId", data.user.id)
+        localStorage.setItem("userId", data.id)
         // Navigasi ke halaman lain setelah registrasi berhasil
         navigate("/login")
       } else {

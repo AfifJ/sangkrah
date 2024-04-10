@@ -32,19 +32,27 @@ class UsersController extends Controller
 
         $password = $request->password;
         $hashedPassword = Hash::make($password);
-
-
-        $image = $request->file('profile_pict');
-        $image->storeAs('public/users', $image->hashName());
-
-        $post = Users::create([
-            'username'      => $request->username,
-            'email'         => $request->email,
-            'password'      => $hashedPassword,
-            'profile_pict'  => $image->hashName(),
-            'balance'       => $request->balance ?? 0,
-            'point'         => $request->point ?? 0,
-        ]);
+        if($request->hasFile('image')){
+            $image = $request->file('image');
+            $image->storeAs('public/posts',$image->hashName());
+            $post=Users::create([
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => $hashedPassword,
+                'profile_pict'  => $image->hashName(),
+                'balance'       => $request->balance ?? 0,
+                'point'         => $request->point ?? 0,
+            ]);
+        }
+        else{
+            $post=Users::create([
+                'username'      => $request->username,
+                'email'         => $request->email,
+                'password'      => $hashedPassword,
+                'balance'       => $request->balance ?? 0,
+                'point'         => $request->point ?? 0,
+            ]);
+        }
         return new PostResource(true, 'Insert user Success!', $post);
     }
     public function update(Request $request,$id){
