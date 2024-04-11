@@ -1,6 +1,5 @@
 import React, { useState,useEffect, useCallback } from "react"
 import Success from "../components/Success"
-import Failed from "../components/Failed"
 import BackNavbar from "../components/BackNavbar"
 import RecyclingCenterSelectionPage from "../components/RecyclingCenterSelectionPage"
 import DeliveryMethodSelectionPage from "../components/DeliveryMethodSelectionPage"
@@ -21,7 +20,6 @@ const RecyclingPage = () => {
   const [wasteWeight, setWasteWeight] = useState(0)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [transactionConfirmed, setTransactionConfirmed] = useState(false)
-  const [transactionFailed, setTransactionFailed] = useState(false)
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -123,14 +121,9 @@ const RecyclingPage = () => {
       // Handle error registrasi, misalnya tampilkan pesan error ke pengguna
       setError("Registration failed. Please try again later.")
     }
-    if(postResult){
       setTransactionConfirmed(true)
       setShowConfirmation(false)
-    }
-    else{
-      setTransactionFailed(true)
-      setShowConfirmation(false)
-    }
+    
   }
 
   const handleCancelTransaction = () => {
@@ -195,7 +188,6 @@ const RecyclingPage = () => {
           />
         )}
         {transactionConfirmed && <Success closeBtn={false} />}
-        {transactionFailed && <Failed closeBtn={false} />}
       </div>
     </>
   )

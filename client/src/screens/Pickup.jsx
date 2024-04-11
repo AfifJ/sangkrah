@@ -23,14 +23,14 @@ const Pickup = () => {
     {
       latitude: -7.6477016 + 0.01,
       longitude: 110.4280727 + 0.01,
-      name: "Recycle Center 1",
-      location: "New York, NY",
+      name: "Tempat Daur Ulang A",
+      location: "Pakem",
     },
     {
       latitude: -7.6477016 - 0.01,
       longitude: 110.4280727 - 0.01,
-      name: "Recycle Center 2000",
-      location: "New York, NY",
+      name: "Pembuangan A",
+      location: "Cangkringan",
     },
   ])
 

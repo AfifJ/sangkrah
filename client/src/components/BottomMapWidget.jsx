@@ -6,9 +6,9 @@ const BottomMapWidget = ({
   toggleWidget,
 }) => {
   const centerData = {
-    name: center.name || "Recycle Center",
+    name: center.name || "Tempat Pembuangan A",
     description: center.description || "A place to recycle your waste.",
-    address: center.address || "123 Main St, Anytown USA",
+    address: center.address || "Pakem",
     logoUrl: center.logoUrl || "https://via.placeholder.com/48",
     operatingHours: center.operatingHours || [
       "Mon-Fri: 9AM-5PM",
