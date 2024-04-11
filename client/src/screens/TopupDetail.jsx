@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState,useEffect } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import BackNavbar from "../components/BackNavbar"
 import { InformationCircleIcon } from "@heroicons/react/24/outline"
@@ -9,6 +9,7 @@ const TopupDetail = () => {
   const { topupMethod, logo } = useLocation().state
   const [topupAmount, setTopupAmount] = useState(null)
   const [success, setSuccess] = useState(false)
+  const [profileData, setProfileData] = useState([])
   const navigate = useNavigate()
   const adminFee = 1500
   const minimumTopup = 10000
@@ -19,6 +20,25 @@ const TopupDetail = () => {
     setTopupAmount(Number(event.target.value))
   }
 
+  useEffect(() => {
+    fetchProfileFromAPI()
+  }, [])
+
+  const fetchProfileFromAPI = async () => {
+    try {
+      const userId = sessionStorage.getItem("userId")
+      //console.log(userId);
+      const apiUrl = `http://127.0.0.1:8000/api/users/${userId}`
+      const response = await fetch(apiUrl)
+      const data = await response.json()
+      //console.log(data);
+
+      setProfileData(data) // Mengambil data dari respons JSON yang diberikan oleh Laravel
+    } catch (error) {
+      console.error("Error fetching profile data:", error)
+    }
+  }
+  console.log(profileData)
   const total = topupAmount + adminFee
   const isTopupValid = topupAmount >= minimumTopup
 
@@ -76,10 +96,10 @@ const TopupDetail = () => {
           <div className="mt-4 space-y-2 text-center">
             <p className="text-xl">ID Akun Anda</p>
             <p className="mx-auto w-fit rounded-xl border border-success bg-primary bg-opacity-10 px-4 py-2 text-2xl font-semibold ">
-              123345768
+              12334500{profileData.id}
             </p>
             <p className="">
-              Nama akun: <span className="font-semibold">John Doe</span>
+              Nama akun: <span className="font-semibold">{profileData.username}</span>
             </p>
             <p className="text-base-secondary">
               Minimal pengisian saldo adalah Rp 10.000
