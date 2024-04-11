@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import BackNavbar from "../components/BackNavbar"
 import { InformationCircleIcon } from "@heroicons/react/24/outline"
 import Accordion from "../components/Accordion"
@@ -9,8 +9,11 @@ const TopupDetail = () => {
   const { topupMethod, logo } = useLocation().state
   const [topupAmount, setTopupAmount] = useState(null)
   const [success, setSuccess] = useState(false)
+  const navigate = useNavigate()
   const adminFee = 1500
   const minimumTopup = 10000
+
+  console.log(topupMethod)
 
   const handleTopupChange = (event) => {
     setTopupAmount(Number(event.target.value))
@@ -18,6 +21,33 @@ const TopupDetail = () => {
 
   const total = topupAmount + adminFee
   const isTopupValid = topupAmount >= minimumTopup
+
+  const handlePay = async(method,nominal) => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const apiUrl = `http://127.0.0.1:8000/api/topup`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          method: method,
+          nominal: nominal,
+          user_id: userId,
+        }),
+      });
+      const data = await response.json();
+      setSuccess(true)
+    } catch (error) {
+      console.error("Error redeeming reward:", error);
+    }
+  }
 
   return (
     <>
@@ -159,7 +189,7 @@ const TopupDetail = () => {
           <p className="font-bold">Rp {total.toLocaleString("id-ID")}</p>
         </div>
         <button
-          onClick={() => setSuccess(true)}
+          onClick={() => handlePay(topupMethod, total)}
           className={`flex items-center justify-center rounded-2xl bg-primary text-white ${
             !isTopupValid && "opacity-50"
           }`}

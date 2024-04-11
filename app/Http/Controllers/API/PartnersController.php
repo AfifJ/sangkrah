@@ -13,7 +13,7 @@ class PartnersController extends Controller
 {
     public function index()
     {
-        $posts = Partners::latest()->paginate(5);
+        $posts = Partners::latest()->paginate(5000);
 
         return new PostResource(true, 'List Data Partners', $posts);
     }

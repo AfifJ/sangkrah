@@ -12,10 +12,10 @@ class Transactions extends Model
 
     protected $fillable = [
         'title',
-        'icon',
         'trash_type',
         'trash_amount',
         'total',
+        'delivery_method',
         'point_obtain',
         'desc',
         'payment_method',
@@ -23,10 +23,4 @@ class Transactions extends Model
         'user_id',
         'partner_id',
     ];
-
-    protected function icon(): Attribute{
-        return Attribute::make(
-            get: fn ($icon)=>url('/storage/transactions/icon/' .$icon),
-        );
-    }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Transactions;
+use App\Models\Users;
+use App\Models\Partners;
 use App\Http\Resources\PostResource;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,56 +16,72 @@ class TransactionsController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->input('user_id'); // Ambil user_id dari request
-        $transactions = Transactions::where('user_id', $user_id)->latest()->paginate(5);
+        $transactions = Transactions::where('user_id', $user_id)->latest();
 
         return new PostResource(true, 'List Data Transaksi', $transactions);
     }
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
-            'title'         => 'required',
-            'icon'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'trash_type'    => 'required',
-            'trash_amount'  => 'required',
-            'total'         => 'required',
-            'point_obtain'  => 'required',
-            'desc'          => 'required',
-            'payment_method'=> 'required',
-            'status'        => 'required',
-            'user_id'       => 'required',
-            'partner_id'    => 'required',
+            'title'             => 'required',
+            'trash_type'        => 'required',
+            'trash_amount'      => 'required',
+            'total'             => 'required',
+            'delivery_method'   => 'required',
+            'point_obtain'      => 'required',
+            'desc'              => 'nullable',
+            'payment_method'    => 'required',
+            'status'            => 'required',
+            'user_id'           => 'required',
+            'partner_id'        => 'required',
         ]);
 
         if($validator->fails()){
             return response()->json($validator->errors(), 422);
         }
-
-        $image = $request->file('icon');
-        $image->storeAs('public/transaction', $image->hashName());
-
+        $user = Users::find($request->user_id);
+        $partner = Partners::find($request->partner_id);
+        if(!$user){
+            return response()->json([
+                'success' => false,
+                'message' => 'Pengguna tidak ditemukan.',
+            ], 404);
+        }
+        if(!$partner){
+            return response()->json([
+                'success' => false,
+                'message' => 'Mitra tidak ditemukan.',
+            ], 404);
+        }
         $post = Transactions::create([
-            'title'         => $request->title,
-            'icon'          => $image->hashName(),
-            'trash_type'    => $request->trash_type,
-            'trash_amount'  => $request->trash_amount,
-            'total'         => $request->total,
-            'point_obtain'  => $request->point_obtain,
-            'desc'          => $request->desc,
-            'payment_method'=> $request->payment_method,
-            'status'        => $request->status,
-            'user_id'       => $request->user_id,
-            'partner_id'    => $request->partner_id,
+            'title'             => $request->title,
+            'trash_type'        => $request->trash_type,
+            'trash_amount'      => $request->trash_amount,
+            'total'             => $request->total,
+            'delivery_method'   => $request->delivery_method,
+            'point_obtain'      => $request->point_obtain,
+            'desc'              => $request->desc,
+            'payment_method'    => $request->payment_method,
+            'status'            => $request->status,
+            'user_id'           => $request->user_id,
+            'partner_id'        => $request->partner_id,
         ]);
+
+        $user->balance -= $request->total;
+        $user->save();
+        $partner->balance += $request->total;
+        $partner->save();
+
         return new PostResource(true, 'Insert transaction Success!', $post);
     }
     public function update(Request $request,$id){
         $validator = Validator::make($request->all(),[
             'title'         => 'required',
-            'icon'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'trash_type'    => 'required',
             'trash_amount'  => 'required',
             'total'         => 'required',
+            'delivery_method'=> 'required',
             'point_obtain'  => 'required',
-            'desc'          => 'required',
+            'desc'          => 'nullable',
             'payment_method'=> 'required',
             'status'        => 'required',
             'user_id'       => 'required',
@@ -78,6 +96,7 @@ class TransactionsController extends Controller
             'trash_type'    => $request->trash_type,
             'trash_amount'  => $request->trash_amount,
             'total'         => $request->total,
+            'delivery_method'=> $request->delivery_method,
             'point_obtain'  => $request->point_obtain,
             'desc'          => $request->desc,
             'payment_method'=> $request->payment_method,

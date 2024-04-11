@@ -1,3 +1,5 @@
+import { useEffect } from "react"
+
 const TransactionDetailsPage = ({
   recyclingCenter,
   deliveryMethod,
@@ -7,9 +9,24 @@ const TransactionDetailsPage = ({
   preConfirm,
   title,
   type = "recycle",
+  onTransactionDetails,
 }) => {
   const validWasteWeight = Number.isNaN(wasteWeight) ? 0 : wasteWeight
-  const totalPrice = validWasteWeight * 2000 // Asumsi harga Rp 2.000 per kg
+  const totalPrice = validWasteWeight * 1500 // Asumsi harga Rp 2.000 per kg
+
+  useEffect(() => {
+    if (onTransactionDetails) {
+      const transactionDetails = {
+        recyclingCenterName: recyclingCenter ? recyclingCenter.id : "",
+        deliveryMethod,
+        wasteTypeName: wasteType ? wasteType.name : "",
+        validWasteWeight,
+        totalPrice: totalPrice.toFixed(2),
+      };
+      //console.log(transactionDetails)
+      onTransactionDetails(transactionDetails);
+    }
+  }, [onTransactionDetails, recyclingCenter, deliveryMethod, wasteType, validWasteWeight, totalPrice]);
 
   return (
     <div>

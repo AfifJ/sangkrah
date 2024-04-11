@@ -26,3 +26,4 @@ Route::apiResource('/partners', App\Http\Controllers\API\PartnersController::cla
 Route::apiResource('/transactions', App\Http\Controllers\API\TransactionsController::class);
 Route::apiResource('/rewards', App\Http\Controllers\API\RewardsController::class);
 Route::apiResource('/userrewards', App\Http\Controllers\API\userRewardController::class);
+Route::apiResource('/topup', App\Http\Controllers\API\TopupController::class);

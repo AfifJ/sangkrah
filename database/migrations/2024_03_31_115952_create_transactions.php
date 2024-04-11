@@ -14,12 +14,11 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->string('title',50);
-            $table->string('icon');
             $table->string('trash_type',25);
             $table->integer('trash_amount');
             $table->Integer('total');
             $table->Integer('point_obtain');
-            $table->longText('desc');
+            $table->longText('desc')->nullable();
             $table->string('payment_method');
             $table->string('status',10);
             $table->unsignedBigInteger('user_id');
