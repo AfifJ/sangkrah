@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import { CircleStackIcon } from "@heroicons/react/24/solid"
-import { Link } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
 import BackNavbar from "../components/BackNavbar"
 
 const Redeem = () => {
   const [filter, setFilter] = useState("semua")
   const [items, setItems] = useState([])
-
+  const [allItems, setAllItems] = useState([]);
+  const [myvoucher, setmyvoucher] = useState([]);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("")
 
   const handleSearchChange = (event) => {
@@ -20,6 +22,21 @@ const Redeem = () => {
 
   useEffect(() => {
     // data fetching
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/userrewards", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        const data = await response.json();
+        setmyvoucher(data.data);
+      } catch (error) {
+        console.error("Error fetching user rewards:", error);
+      }
+    };
+
+    fetchData();
     const allItems = [
       {
         category: "semua",

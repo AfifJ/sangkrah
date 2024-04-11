@@ -1,71 +1,117 @@
 import React, { useState, useEffect } from "react"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import { CircleStackIcon } from "@heroicons/react/24/solid"
-import { Link } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
 
 const Redeem = () => {
-  const [filter, setFilter] = useState("semua")
-  const [items, setItems] = useState([])
-
-  const [searchTerm, setSearchTerm] = useState("")
+  const [filter, setFilter] = useState("semua");
+  const [allItems, setAllItems] = useState([]);
+  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [userpoint, setuserpoint] = useState(null);
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value)
+    setSearchTerm(event.target.value);
   }
 
   const handleFilterChange = (newFilter) => {
-    setFilter(newFilter)
+    setFilter(newFilter);
   }
 
   useEffect(() => {
-    // data fetching
-    const allItems = [
-      {
-        category: "semua",
-        title: "Diskon 20% di KFC",
-        date: "Hingga 31 Desember 2021",
-      },
-      {
-        category: "semua",
-        title: "Diskon 30% di McDonalds",
-        date: "Hingga 30 November 2021",
-      },
-      {
-        category: "belanja",
-        title: "Diskon 50% di Zara",
-        date: "Hingga 31 Oktober 2021",
-      },
-      {
-        category: "belanja",
-        title: "Diskon 40% di Uniqlo",
-        date: "Hingga 31 Oktober 2021",
-      },
-      {
-        category: "makanan & minuman",
-        title: "Diskon 20% di Starbucks",
-        date: "Hingga 31 Desember 2021",
-      },
-      {
-        category: "makanan & minuman",
-        title: "Diskon 25% di Dunkin Donuts",
-        date: "Hingga 31 Desember 2021",
-      },
-    ]
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) {
+      navigate("/login"); // Jika userId tidak tersedia, navigasi ke halaman login
+    }
 
-    let filteredItems = allItems
+    const fetchUserIdFromAPI = async () => {
+      try {
+        const apiUrl = `http://127.0.0.1:8000/api/users/${userId}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        // console.log(data);
+          setuserpoint(data.point);
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+    fetchUserIdFromAPI();
+
+    const fetchRewardFromAPI = async () => {
+      try {
+        const apiUrl = `http://127.0.0.1:8000/api/rewards`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        // console.log(data);
+
+        if (data.success && data.data && Array.isArray(data.data.data)) {
+          const formattedData = data.data.data.map((item) => ({
+            id: item.id,
+            category: item.category,
+            title: item.title,
+            stock: item.stock,
+            desc: item.desc,
+            price: item.price,
+          }));
+    
+          setAllItems(formattedData);
+        } else {
+          console.error("Invalid data format:", data);
+        }
+
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    fetchRewardFromAPI();
+  }, []);
+
+  useEffect(() => {
+    let filteredItems = allItems;
 
     if (filter !== "semua") {
-      filteredItems = filteredItems.filter((item) => item.category === filter)
+      filteredItems = filteredItems.filter((item) => item.category === filter);
     }
 
     if (searchTerm) {
       filteredItems = filteredItems.filter((item) =>
         item.title.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      );
     }
 
-    setItems(filteredItems)
-  }, [filter, searchTerm])
+    setItems(filteredItems);
+  }, [filter, searchTerm, allItems]); // Tambahkan allItems sebagai dependency
+
+  const handleRedeem = async (rewardId) => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    try {
+      const apiUrl = `http://127.0.0.1:8000/api/userrewards/`;
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userID: userId,
+          rewardID: rewardId,
+        }),
+      });
+      const data = await response.json();
+      console.log(data); // Handle response from API
+    } catch (error) {
+      console.error("Error redeeming reward:", error);
+    }
+  };
+
+  //console.log(items);
+  //console.log(userpoint);
 
   return (
     <>
@@ -87,7 +133,7 @@ const Redeem = () => {
           <CircleStackIcon className="h-6 w-6 text-primary" />
         </div>
         Poin hadiah
-        <div className="ml-auto font-bold">55 Poin</div>
+        <div className="ml-auto font-bold">{userpoint} Poin</div>
       </div>
 
       <div className="flex space-x-4 px-5 pt-6">
@@ -116,7 +162,8 @@ const Redeem = () => {
           {items.length > 0 ? (
             items.map((item) => (
               <Link
-                to={"detail"}
+                to="detail" state={{detail: item}}
+                //onClick={() => handleDetail(item)}
                 key={item.title}
                 className="rounded-2xl border border-base-content border-opacity-40 bg-white"
               >
@@ -124,9 +171,9 @@ const Redeem = () => {
                 <div className="p-4">
                   <div className="text-lg font-bold">{item.title}</div>
                   <div className="text-sm text-base-content text-opacity-60">
-                    {item.date}
+                    Sisa : {item.stock} Item
                   </div>
-                  <button className="mt-4 w-full rounded-2xl bg-primary py-3 text-white">
+                  <button onClick={() => handleRedeem(item.id)} className="mt-4 w-full rounded-2xl bg-primary py-3 text-white">
                     Tukar
                   </button>
                 </div>

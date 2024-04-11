@@ -25,3 +25,4 @@ Route::apiResource('/users', App\Http\Controllers\API\UsersController::class);
 Route::apiResource('/partners', App\Http\Controllers\API\PartnersController::class);
 Route::apiResource('/transactions', App\Http\Controllers\API\TransactionsController::class);
 Route::apiResource('/rewards', App\Http\Controllers\API\RewardsController::class);
+Route::apiResource('/userrewards', App\Http\Controllers\API\userRewardController::class);

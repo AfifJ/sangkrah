@@ -15,7 +15,7 @@ class RewardsController extends Controller
     {
         $posts = Rewards::latest()->paginate(5);
 
-        return new PostResource(true, 'List Data transaksi', $posts);
+        return new PostResource(true, 'List Data reward', $posts);
     }
     public function store(Request $request){
         $validator = Validator::make($request->all(), [
