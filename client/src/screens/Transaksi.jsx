@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link,useNavigate } from "react-router-dom"
 import axios from "axios"
 
 const historyData = [
@@ -46,46 +46,76 @@ const Transaksi = () => {
   }
 
   const [transactions, setTransactions] = useState([])
+  const [userbalance, setuserbalance] = useState([])
   const userId = sessionStorage.getItem("userId")
 
   useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    if (!userId) {
+      navigate("/login"); // Jika userId tidak tersedia, navigasi ke halaman login
+    }
+
+    const fetchUserIdFromAPI = async () => {
+      try {
+        const apiUrl = `http://127.0.0.1:8000/api/users/${userId}`;
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        // console.log(data);
+          setuserbalance(data.balance);
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+    fetchUserIdFromAPI();
     const fetchTransactions = async () => {
       try {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/transactions?user_id=${userId}`
         )
-        setTransactions(response.data)
+        setTransactions(response.data.data.data)
       } catch (error) {
         console.error("Error fetching transactions:", error)
       }
     }
-
+    console.log(transactions)
     if (userId) {
       fetchTransactions()
     }
   }, [userId])
   console.log(transactions);
-  const filteredData = historyData.filter((transaction) => {
+  const filteredData = transactions.filter((transaction) => {
     if (filterOption === "") return true
-    if (filterOption === "buangsampah")
-      return transaction.category === "buangsampah"
-    if (filterOption === "dauruang") return transaction.category === "dauruang"
-    if (filterOption === "voucher") return transaction.category === "voucher"
+    if (filterOption === "Buang")
+      return transaction.title === "Buang"
+    if (filterOption === "Daur Ulang") return transaction.title === "Daur Ulang"
+    if (filterOption === "Voucher") return transaction.title === "Voucher"
     return true
   })
 
   const sortedData = filteredData.sort((a, b) => {
-    if (sortOrder === "terbaru") return new Date(b.date) - new Date(a.date)
-    if (sortOrder === "terlama") return new Date(a.date) - new Date(b.date)
+    if (sortOrder === "terbaru") return new Date(b.created_at) - new Date(a.created_at)
+    if (sortOrder === "terlama") return new Date(a.created_at) - new Date(b.created_at)
     return 0
   })
+
+  const formatDate = (dateString) => {
+    const dateObj = new Date(dateString);
+    return dateObj.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    });
+  };
 
   return (
     <>
       <div className="flex justify-between bg-primary px-5 py-6 text-base-200 text-opacity-90">
         <h1 className="text-2xl font-bold">History Transaksi</h1>
         <p className="text-lg font-semibold">
-          Saldo: Rp {currentBalance.toLocaleString()}
+          Saldo: Rp {userbalance.toLocaleString()}
         </p>
       </div>
       <div className="relative h-3 w-full bg-primary">
@@ -103,9 +133,9 @@ const Transaksi = () => {
             onChange={(e) => setFilterOption(e.target.value)}
           >
             <option value="">Semua</option>
-            <option value="buangsampah">Buang Sampah</option>
-            <option value="dauruang">Daur Ulang</option>
-            <option value="voucher">Penukaran Voucher</option>
+            <option value="Buang">Buang Sampah</option>
+            <option value="Daur Ulang">Daur Ulang</option>
+            <option value="Voucher">Penukaran Voucher</option>
           </select>
 
           <label htmlFor="sort" className="mx-2 font-semibold">
@@ -127,7 +157,7 @@ const Transaksi = () => {
           {sortedData.map((transaction) => (
             <Link
               // to={`/transaksi/${transaction.id}`}
-              to={`/transaksi/detail`}
+              to="detail" state={{detail: transaction}}
               key={transaction.id}
               className="rounded-2xl border border-gray-300 bg-white p-4"
             >
@@ -136,20 +166,20 @@ const Transaksi = () => {
                   {categoryIcons[transaction.category]}
                 </span>
                 <h2 className="text-lg font-semibold">{transaction.title}</h2>
-                <p className="ml-auto text-gray-600">{transaction.date}</p>
+                <p className="ml-auto text-gray-600">{formatDate(transaction.created_at)}</p>
               </div>
-              <p className="mb-2 text-gray-600">{transaction.description}</p>
+              <p className="mb-2 text-gray-600">{transaction.desc}</p>
               <p
                 className={`font-semibold ${
-                  transaction.amount > 0 ? "text-green-600" : "text-red-600"
+                  transaction.total > 0 ? "text-green-600" : "text-red-600"
                 }`}
               >
-                {transaction.amount > 0 ? "+" : "-"} Rp{" "}
-                {Math.abs(transaction.amount).toLocaleString()}
+                {transaction.total > 0 ? "+" : "-"} Rp{" "}
+                {Math.abs(transaction.total).toLocaleString()}
               </p>
               <p className="text-gray-500">
                 Status:{" "}
-                {transaction.status === "success" ? "Berhasil" : "Gagal"}
+                {transaction.status === "success" ? "Berhasil" : "Done"}
               </p>
             </Link>
           ))}

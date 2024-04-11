@@ -1,5 +1,6 @@
 import React, { useState,useEffect, useCallback } from "react"
 import Success from "../components/Success"
+import Failed from "../components/Failed"
 import BackNavbar from "../components/BackNavbar"
 import RecyclingCenterSelectionPage from "../components/RecyclingCenterSelectionPage"
 import DeliveryMethodSelectionPage from "../components/DeliveryMethodSelectionPage"
@@ -14,11 +15,13 @@ const RecyclingPage = () => {
   const [allPartners, setAllPartners] = useState([]);
   const [postDetails, setPostDetails] = useState([]);
   const [pickupAddress, setPickupAddress] = useState("")
+  const [postResult, setPostResult] = useState("")
   const [pickupSchedule, setPickupSchedule] = useState("")
   const [selectedWasteType, setSelectedWasteType] = useState("")
   const [wasteWeight, setWasteWeight] = useState(0)
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [transactionConfirmed, setTransactionConfirmed] = useState(false)
+  const [transactionFailed, setTransactionFailed] = useState(false)
 
   useEffect(() => {
     const userId = sessionStorage.getItem("userId");
@@ -27,7 +30,7 @@ const RecyclingPage = () => {
     }
     const fetchRewardFromAPI = async () => {
       try {
-        const apiUrl = `http://127.0.0.1:8000/api/partners?service=Recycle`;
+        const apiUrl = `http://127.0.0.1:8000/api/partners?service=recycle`;
         const response = await fetch(apiUrl);
         const data = await response.json();
         // console.log(data);
@@ -113,13 +116,21 @@ const RecyclingPage = () => {
           partner_id: transData.recyclingCenterName,
         }),
       })
+      const result = await response.json();
+      setPostResult(result.success)
     } catch (error) {
       console.error("Error registering:", error)
       // Handle error registrasi, misalnya tampilkan pesan error ke pengguna
       setError("Registration failed. Please try again later.")
     }
-    setTransactionConfirmed(true)
-    setShowConfirmation(false)
+    if(postResult){
+      setTransactionConfirmed(true)
+      setShowConfirmation(false)
+    }
+    else{
+      setTransactionFailed(true)
+      setShowConfirmation(false)
+    }
   }
 
   const handleCancelTransaction = () => {
@@ -184,6 +195,7 @@ const RecyclingPage = () => {
           />
         )}
         {transactionConfirmed && <Success closeBtn={false} />}
+        {transactionFailed && <Failed closeBtn={false} />}
       </div>
     </>
   )

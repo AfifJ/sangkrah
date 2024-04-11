@@ -27,7 +27,7 @@ const BuangPage = () => {
     }
     const fetchRewardFromAPI = async () => {
       try {
-        const apiUrl = `http://127.0.0.1:8000/api/partners?service=Recycle`;
+        const apiUrl = `http://127.0.0.1:8000/api/partners?service=buang`;
         const response = await fetch(apiUrl);
         const data = await response.json();
         // console.log(data);

@@ -14,12 +14,10 @@ class userRewardController extends Controller
 {
     public function index(Request $request)
     {
-        $userId = $request->user()->id;
-
-        // Ambil data userReward yang terkait dengan pengguna yang sedang login
-        $userRewards = userReward::where('user_id', $userId)->latest()->get();
+        $user_id = $request->input('user_id'); // Ambil user_id dari request
+        $userrewards = userReward::where('user_id', $user_id)->latest()->paginate(5000);
     
-        return new PostResource(true, 'List Data userReward', $userRewards);
+        return new PostResource(true, 'List Data userReward', $userrewards);
     }
     public function store(Request $request){
         $validator = Validator::make($request->all(), [

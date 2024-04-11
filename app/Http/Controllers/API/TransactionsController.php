@@ -16,7 +16,7 @@ class TransactionsController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->input('user_id'); // Ambil user_id dari request
-        $transactions = Transactions::where('user_id', $user_id)->latest();
+        $transactions = Transactions::where('user_id', $user_id)->latest()->paginate(5000);
 
         return new PostResource(true, 'List Data Transaksi', $transactions);
     }
@@ -50,6 +50,12 @@ class TransactionsController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Mitra tidak ditemukan.',
+            ], 404);
+        }
+        if($user->balance < $request->total){
+            return response()->json([
+                'success' => false,
+                'message' => 'Saldo kurang!',
             ], 404);
         }
         $post = Transactions::create([

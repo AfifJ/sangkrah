@@ -3,11 +3,12 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline"
 import { CircleStackIcon } from "@heroicons/react/24/solid"
 import { Link,useNavigate } from "react-router-dom"
 import BackNavbar from "../components/BackNavbar"
+import axios from "axios"
 
 const Redeem = () => {
   const [filter, setFilter] = useState("semua")
   const [items, setItems] = useState([])
-  const [allItems, setAllItems] = useState([]);
+  const [rewards, setrewards] = useState([]);
   const [myvoucher, setmyvoucher] = useState([]);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("")
@@ -22,21 +23,28 @@ const Redeem = () => {
 
   useEffect(() => {
     // data fetching
+    const userId = sessionStorage.getItem("userId")
     const fetchData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/userrewards", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const data = await response.json();
-        setmyvoucher(data.data);
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/userrewards?user_id=${userId}`
+        )
+        setmyvoucher(response.data.data.data)
       } catch (error) {
-        console.error("Error fetching user rewards:", error);
+        console.error("Error fetching transactions:", error)
       }
     };
-
+    const fetchRewards = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/rewards");
+        setrewards(response.data.data.data);
+      } catch (error) {
+        console.error("Error fetching rewards:", error);
+      }
+    };
     fetchData();
+    fetchRewards()
+    console.log(rewards)
     const allItems = [
       {
         category: "semua",
@@ -70,6 +78,9 @@ const Redeem = () => {
     setItems(filteredItems)
   }, [filter, searchTerm])
 
+  const getRewardById = (rewardId) => {
+    return rewards.find((reward) => reward.id === rewardId);
+  };
   return (
     <>
       <BackNavbar link="/profile">Voucher Saya</BackNavbar>
@@ -96,30 +107,36 @@ const Redeem = () => {
 
       <div>
         <div className="grid grid-cols-1 gap-4 px-5 pt-6 md:grid-cols-2">
-          {items.length > 0 ? (
-            items.map((item) => (
+        {myvoucher.map((userReward) => {
+            const reward = getRewardById(userReward.reward_id);
+            if (!reward) return null; // Skip jika reward tidak ditemukan
+
+            return (
               <Link
-                to={"detail"}
-                key={item.title}
+                to="#"
+                key={userReward.id}
                 className="rounded-2xl border border-base-content border-opacity-40 bg-white"
               >
                 <div className="h-40 rounded-t-2xl bg-base-200"></div>
                 <div className="p-4">
-                  <div className="text-lg font-bold">{item.title}</div>
+                  <div className="text-lg font-bold">{reward.title}</div>
                   <div className="text-sm text-base-content text-opacity-60">
-                    {item.date}
+                    {reward.date}
                   </div>
-                  <button className="mt-4 w-full rounded-2xl bg-primary py-3 text-white">
+                  {/* Tombol untuk memuat detail reward */}
+                  <button
+                    className="mt-4 w-full rounded-2xl bg-primary py-3 text-white"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate(`/transaksi/detail/${userReward.reward_id}`);
+                    }}
+                  >
                     Gunakan
                   </button>
                 </div>
               </Link>
-            ))
-          ) : (
-            <div className="text-center text-lg font-semibold">
-              Maaf, item yang Anda cari tidak tersedia.
-            </div>
-          )}
+            );
+          })}
         </div>
       </div>
 

@@ -11,9 +11,10 @@ use Illuminate\Support\Facades\Validator;
 
 class PartnersController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Partners::latest()->paginate(5000);
+        $service = $request->input('service'); // Ambil user_id dari request
+        $posts = Partners::where('service', $service)->latest()->paginate(5000);
 
         return new PostResource(true, 'List Data Partners', $posts);
     }
