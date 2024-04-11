@@ -54,7 +54,6 @@ const Register = () => {
     <div className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       <div className="w-full max-w-md rounded-lg bg-white p-8 shadow-lg">
         <div className="mb-6 flex justify-center">
-          <img src={"logo"} alt="Logo" className="h-12 w-12" />
         </div>
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
